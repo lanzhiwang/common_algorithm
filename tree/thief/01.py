@@ -55,7 +55,6 @@ node1
 [0, 1, None, None, None, None]
 [0, 0, None, None, None, None]
 
-
 node2
 [1, 0, 0, None, None, None]
 [0, 1, 1, None, None, None]
