@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+https://github.com/lanzhiwang/Python-Algorithms/blob/master/sorts/quick_sort.py
+"""
 def quick_sort(collection):
     length = len(collection)
     if length <= 1:
