@@ -28,7 +28,6 @@ def bubble_sort(collection):
     return collection[0:i] + collection[i+1:] + [max_element]
 
 
-
 if __name__ == '__main__':
     unsorted = [12, 35, 99, 18, 76]
     print(bubble_sort(unsorted))
