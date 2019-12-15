@@ -11,6 +11,7 @@ N = 10 增量序列 [5 2 1]  # N = 9 增量序列 [4 2 1]
 排序：[3 8] [5 9] [1 4] [6 7] [0 2]
 合并：3 5 1 6 0 8 9 4 7 2
 
+
 增量为2，分为2组，每组5个元素
 下标：0 1 2 3 4 5 6 7 8 9
 序列：3 5 1 6 0 8 9 4 7 2
@@ -21,8 +22,6 @@ N = 10 增量序列 [5 2 1]  # N = 9 增量序列 [4 2 1]
 增量为1，分为1组，每组10个元素
 下标：0 1 2 3 4 5 6 7 8 9
 序列：0 2 1 4 3 5 7 6 9 8
-
-
 
 """
 
@@ -48,26 +47,21 @@ def quick_sort_3partition(sorting, left, right):
 
 
 def shell_sort(collection):
-    result = []
     length = len(collection)
     if length <= 1:
         return collection
-    increment = [length // 2]
-    while (increment[-1] // 2) >= 1:
-        increment.append(increment[-1] // 2)
-    for step in increment:  # [5, 2, 1]
-        temp = []
-        for i in range(step):
-            temp.append(collection[i::step])
-        print(temp)
-        for l in temp:
-            quick_sort_3partition(l, 0, len(l)-1)
-        print(temp)
+    gaps = [length // 2]
+    while (gaps[-1] // 2) >= 1:
+        gaps.append(gaps[-1] // 2)
 
+    for step in gaps:  # [5, 2, 1]
+        for i in range(step):
+            temp = collection[i::step]
+            quick_sort_3partition(temp, 0, len(temp) - 1)
+            collection[i::step] = temp
 
 
 if __name__ == '__main__':
-    unsorted = [6, 1, 2, 7, 9, 3, 4, 5, 10, 8]
-    # unsorted = [6, 1, 2, 7, 9, 3, 4, 5, 10]
+    unsorted = [8, 9, 1, 7, 2, 3, 5, 4, 6, 0]
     shell_sort(unsorted)
     print(unsorted)
