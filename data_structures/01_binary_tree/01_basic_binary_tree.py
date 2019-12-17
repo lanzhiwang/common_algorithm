@@ -36,6 +36,7 @@ def is_full_binary_tree(tree): # This functions returns that is it full binary t
         return True
     if (tree.left is None) and (tree.right is None):
         return True
+
     if (tree.left is not None) and (tree.right is not None):
         return (is_full_binary_tree(tree.left) and is_full_binary_tree(tree.right))
     else:
@@ -44,11 +45,16 @@ def is_full_binary_tree(tree): # This functions returns that is it full binary t
 
 def main(): # Main func for testing.
     r"""
-    Node(1)
-    Node(2) Node(3)
-    Node(4) Node(5)
 
-
+         1
+      /    \
+     2      3
+    / \    /
+   4   5  7
+      /  /
+     6  8
+         \
+          9
 
     """
     tree = Node(1)
