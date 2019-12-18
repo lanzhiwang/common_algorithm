@@ -1,6 +1,8 @@
 '''
 A binary search Tree
 '''
+
+
 class Node:
 
     def __init__(self, label, parent):
@@ -33,6 +35,7 @@ class Node:
 
     def setParent(self, parent):
         self.parent = parent
+
 
 class BinarySearchTree:
 
@@ -185,6 +188,7 @@ class BinarySearchTree:
             str = str + " " + x.getLabel().__str__()
         return str
 
+
 def InPreOrder(curr_node):
     nodeList = []
     if curr_node is not None:
@@ -192,6 +196,7 @@ def InPreOrder(curr_node):
         nodeList.insert(0, curr_node.getLabel())
         nodeList = nodeList + InPreOrder(curr_node.getRight())
     return nodeList
+
 
 def testBinarySearchTree():
     r'''
@@ -252,6 +257,7 @@ def testBinarySearchTree():
     list = t.traversalTree(InPreOrder, t.root)
     for x in list:
         print(x)
+
 
 if __name__ == "__main__":
     testBinarySearchTree()
