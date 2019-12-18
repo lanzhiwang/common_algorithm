@@ -6,6 +6,10 @@ import sys, inspect
 构建搜索二叉树
 
 中序遍历 搜索二叉树
+
+判断某个值是否存在
+
+获得最大值和最小值
 '''
 
 
@@ -86,6 +90,37 @@ class BinarySearchTree:
                 parent_node.setRight(new_node)
             new_node.setParent(parent_node)
 
+    def getNode(self, label):
+        curr_node = None
+        if not self.empty():
+            curr_node = self.getRoot()
+            while (curr_node is not None) and (curr_node.getLabel() != label):
+                if label < curr_node.getLabel():
+                    curr_node = curr_node.getLeft()
+                else:
+                    curr_node = curr_node.getRight()
+        return curr_node
+
+    def getMax(self, root=None):
+        if root is not None:
+            curr_node = root
+        else:
+            if not self.empty():
+                curr_node = self.getRoot()
+                while curr_node.getRight() is not None:
+                    curr_node = curr_node.getRight()
+        return curr_node
+
+    def getMin(self, root=None):
+        if root is not None:
+            curr_node = root
+        else:
+            if not self.empty():
+                curr_node = self.getRoot()
+                while curr_node.getLeft() is not None:
+                    curr_node = curr_node.getLeft()
+        return curr_node
+
     def empty(self):
         if self.root is None:
             return True
@@ -113,21 +148,6 @@ class BinarySearchTree:
 """
 中序遍历
 """
-# class display(object):
-#     def __call__(self, tree):
-#         if tree is None:
-#             return
-#
-#         if tree.getLeft() is not None:
-#             self.__call__(tree.getLeft())
-#
-#         print(tree.getLabel())
-#
-#         if tree.getRight() is not None:
-#             self.__call__(tree.getRight())
-#
-#         return
-
 def display(tree): #In Order traversal of the tree
 
     if tree is None:
@@ -142,48 +162,6 @@ def display(tree): #In Order traversal of the tree
         display(tree.getRight())
 
     return
-
-
-
-"""
-中序遍历
-"""
-class display1(object):
-    def __call__(self, tree):
-        result = []
-
-        if tree is None:
-            return result
-
-        left_node = tree.getLeft()
-        if left_node is not None:
-            result = result + self.__call__(left_node)
-
-        result = result + [tree.getLabel()]
-
-        right_node = tree.getRight()
-        if right_node is not None:
-            result = result + self.__call__(right_node)
-
-        return result
-
-# def display1(tree): #In Order traversal of the tree
-#     result = []
-#
-#     if tree is None:
-#         return result
-#
-#     left_node = tree.getLeft()
-#     if left_node is not None:
-#         result = result + display1(left_node)
-#
-#     result = result + [tree.getLabel()]
-#
-#     right_node = tree.getRight()
-#     if right_node is not None:
-#         result = result + display1(right_node)
-#
-#     return result
 
 
 def testBinarySearchTree():
@@ -218,9 +196,22 @@ def testBinarySearchTree():
 
     #Prints all the elements of the list in order traversal
     print(t.__str__())  # 8 3 1 6 4 7 10 14 13
-
     display(t.getRoot())
-    print(display1()(t.getRoot()))
+
+    if (t.getNode(6) is not None):
+        print("The label 6 exists")
+    else:
+        print("The label 6 doesn't exist")
+
+    if (t.getNode(-1) is not None):
+        print("The label -1 exists")
+    else:
+        print("The label -1 doesn't exist")
+
+    if not t.empty():
+        print(("Max Value: ", t.getMax().getLabel()))
+        print(("Min Value: ", t.getMin().getLabel()))
+
 
 
 if __name__ == "__main__":
