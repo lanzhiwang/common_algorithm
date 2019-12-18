@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import sys, inspect
 
 '''
 构建搜索二叉树
+
+中序遍历 搜索二叉树
 '''
 
 
@@ -39,6 +42,24 @@ class Node:
     def setParent(self, parent):
         self.parent = parent
 
+    def __str__(self):
+        if (self.getLeft() is not None) and (self.getRight() is not None):
+            return 'label: %s, left: %s, right: %s' % (
+                self.getLabel(), self.getLeft().getLabel(), self.getRight().getLabel())
+
+        elif (self.getLeft() is None) and (self.getRight() is not None):
+            return 'label: %s, left: %s, right: %s' % (
+                self.getLabel(), None, self.getRight().getLabel())
+
+        elif (self.getLeft() is not None) and (self.getRight() is None):
+            return 'label: %s, left: %s, right: %s' % (
+                self.getLabel(), self.getLeft().getLabel(), None)
+
+        else:
+            return 'label: %s, left: %s, right: %s' % (
+                self.getLabel(), None, None)
+
+
 
 class BinarySearchTree:
 
@@ -70,6 +91,9 @@ class BinarySearchTree:
             return True
         return False
 
+    def getRoot(self):
+        return self.root
+
     def __InOrderTraversal(self, curr_node):
         nodeList = []
         if curr_node is not None:
@@ -84,6 +108,82 @@ class BinarySearchTree:
         for x in list:
             str = str + " " + x.getLabel().__str__()
         return str
+
+
+"""
+中序遍历
+"""
+# class display(object):
+#     def __call__(self, tree):
+#         if tree is None:
+#             return
+#
+#         if tree.getLeft() is not None:
+#             self.__call__(tree.getLeft())
+#
+#         print(tree.getLabel())
+#
+#         if tree.getRight() is not None:
+#             self.__call__(tree.getRight())
+#
+#         return
+
+def display(tree): #In Order traversal of the tree
+
+    if tree is None:
+        return
+
+    if tree.getLeft() is not None:
+        display(tree.getLeft())
+
+    print(tree.getLabel())
+
+    if tree.getRight() is not None:
+        display(tree.getRight())
+
+    return
+
+
+
+"""
+中序遍历
+"""
+class display1(object):
+    def __call__(self, tree):
+        result = []
+
+        if tree is None:
+            return result
+
+        left_node = tree.getLeft()
+        if left_node is not None:
+            result = result + self.__call__(left_node)
+
+        result = result + [tree.getLabel()]
+
+        right_node = tree.getRight()
+        if right_node is not None:
+            result = result + self.__call__(right_node)
+
+        return result
+
+# def display1(tree): #In Order traversal of the tree
+#     result = []
+#
+#     if tree is None:
+#         return result
+#
+#     left_node = tree.getLeft()
+#     if left_node is not None:
+#         result = result + display1(left_node)
+#
+#     result = result + [tree.getLabel()]
+#
+#     right_node = tree.getRight()
+#     if right_node is not None:
+#         result = result + display1(right_node)
+#
+#     return result
 
 
 def testBinarySearchTree():
@@ -117,8 +217,10 @@ def testBinarySearchTree():
     t.insert(7)
 
     #Prints all the elements of the list in order traversal
-    print(t.__str__())
+    print(t.__str__())  # 8 3 1 6 4 7 10 14 13
 
+    display(t.getRoot())
+    print(display1()(t.getRoot()))
 
 
 if __name__ == "__main__":
