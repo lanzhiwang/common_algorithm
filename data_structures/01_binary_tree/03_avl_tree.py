@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
 An auto-balanced binary tree!
+平衡二叉搜索树
 '''
 import math
 import random
