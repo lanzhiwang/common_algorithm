@@ -41,16 +41,21 @@ def counting_sort(collection):
 
 if __name__ == '__main__':
     unsorted = [2, 2, 3, 5]
+    print(unsorted)
     print(counting_sort(unsorted))
 
     unsorted = [2, 5, 3, 0, 2, 3, 0, 3]
+    print(unsorted)
     print(counting_sort(unsorted))
 
     unsorted = [0, 2, 2, 3, 5]
+    print(unsorted)
     print(counting_sort(unsorted))
 
     unsorted = []
+    print(unsorted)
     print(counting_sort(unsorted))
 
     unsorted = [-45, -5, -2]
+    print(unsorted)
     print(counting_sort(unsorted))

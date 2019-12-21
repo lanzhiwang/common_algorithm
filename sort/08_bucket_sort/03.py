@@ -4,34 +4,40 @@
 """
 桶排序
 
-原始序列 8 3 2 5 5
+处理负数
 
-大概确定原始序列的最大值：8
-  0    0    0    0    0    0    0    0    0
-a[0] a[1] a[2] a[3] a[4] a[5] a[6] a[7] a[8]
+[-45, -5, -2]
+min: -45
+max: -2
+bucket_len: -2 - (-45) + 1 = 44
 
-  0    0    1    1    0    2    0    0    1
-a[0] a[1] a[2] a[3] a[4] a[5] a[6] a[7] a[8]
+{
+-45: 0
+-44: 0
+-43: 0
+...
+-2: 0
+}
 
-排序后的结果：
-2 3 5 5 8
-
+[0, 0,  0,  0, ..., 0]
+-45 -44 -43 -42     -2
 
 """
 
-# 无法处理负数
+
 def bucket_sort(my_list):
     result = []
     if len(my_list) <= 1:
         return my_list
 
     max_value = max(my_list)
-    buckets = [0 for _ in range(int(max_value)+1)]
+    min_value = min(my_list)
+    buckets = {i: 0 for i in range(min_value, max_value+1)}
 
     for i in my_list:
         buckets[i] += 1
 
-    for index in range(len(buckets)):
+    for index in buckets:
         for _ in range(buckets[index]):
             result.append(index)
 
@@ -55,7 +61,6 @@ if __name__ == '__main__':
     print(unsorted)
     print(bucket_sort(unsorted))
 
-    # 无法处理负数
-    unsorted = [-45, -5, -2]
+    unsorted = [-45, -2, -5]
     print(unsorted)
     print(bucket_sort(unsorted))
