@@ -5,6 +5,7 @@
 基数排序
 
 https://mp.weixin.qq.com/s/WA3_h4IgIgNTNYeKs-j__Q
+https://blog.csdn.net/xgf415/article/details/76595887
 
 基数排序有两种方式进行，一种是LSD，从右边关键字开始排序，另一种是MSD，从左边关键字开始排序。
 https://blog.csdn.net/xgf415/article/details/76595887
@@ -72,20 +73,11 @@ def get_max_n(collection):
 
 
 def radix_sort_msd(collection, exp):
-    # print('radix_sort_msd')
-    # print(collection, exp)
-
     c = {i: [] for i in range(0, 10)}
-    # print(c)
     for number in collection:
         c[number // exp % 10].append(number)
-    # print(c)  # {0: [9, 1, 7, 11, 15, 25, 5], 1: [103, 107], 2: [201, 209], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []}
 
     result = []
-    # if exp == 1:
-    #     for value in c.values():
-    #         result += value
-    #     return result
     for value in c.values():
         if exp == 1:
             result += value
@@ -94,15 +86,12 @@ def radix_sort_msd(collection, exp):
     return result
 
 
-# 基数排序SD(只考虑正整数)
+# 基数排序MSD(只考虑正整数)
 def radix_sort_msd_help(collection):
-    # print('radix_sort_msd_help')
-    # print(collection)
     if len(collection) <= 1:
         return collection
 
     max_value, n = get_max_n(collection)
-    # print(max_value, n)
 
     if max_value == 0:  # collection = [0, 0, 0, 0, 0]
         return collection
@@ -110,14 +99,9 @@ def radix_sort_msd_help(collection):
     exp = pow(10, n-1)
     return radix_sort_msd(collection, exp)
 
-    # for i in range(n-1, -1, -1):  # 0, 1, 2
-    #     exp = pow(10, i)  # 100, 10, 1
-    #     counting_sort(collection, exp)
-
 
 if __name__ == '__main__':
     tests = [[], [0], [2], [0, 0, 0, 0], [103, 9, 1, 7, 11, 15, 25, 201, 209, 107, 5]]
-    # tests = [[103, 9, 1, 7, 11, 15, 25, 201, 209, 107, 5]]
     for test in tests:
         print(test)
         print(radix_sort_msd_help(test))
