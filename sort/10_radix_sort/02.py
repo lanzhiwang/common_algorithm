@@ -34,77 +34,86 @@ def get_max_n(collection):
 
     n = 1
     exp = 10
-    while True:
-        number1 = (max_value // exp) % 10
-        number2 = (max_value // (exp * 10)) % 10
-        if number1 == 0 and number2 == 0:
-            break
-        elif number1 != 0 and number2 == 0:
-            n += 1
-            break
-        else:
-            exp *= 100
-            n += 2
+    while max_value // exp:
+        n += 1
+        exp *= 10
+
     return max_value, n
 
 
+# [{0: 3}, {1: 9}, {2: 1}, {3: 7}, {4: 1}, {5: 5}, {6: 5}, {7: 1}, {8: 9}, {9: 7}, {10: 5}]
+def get_max_min(collection):
+    print(collection)
+    min_value = None
+    max_value = None
+    for key, value in collection:
+        if max_value is None and min_value is None:
+            min_value = value
+            max_value = value
+            break
+        if value < min_value:
+            min_value = value
+        if max_value < value:
+            max_value = value
+    return min_value, max_value
+
+
 # 计数排序
-def counting_sort(collection):
-    if len(collection) <= 1:
+def counting_sort(collection, exp):
+    # print('计数排序')
+    # print(collection, exp)
+    length = len(collection)
+    if length <= 1:
         return collection
 
-    result = [None] * len(collection)
-    min_value = min(collection)
-    max_value = max(collection)
+    numbers = []
+    for i in collection:
+        numbers.append(i // exp % 10)
+
+    result = [None] * length
+    min_value = min(numbers)
+    max_value = max(numbers)
 
     c = [0] * (max_value - min_value + 1)
 
-    for number in collection:
-        c[number - min_value] += 1
+    for number in numbers:
+        c[number - abs(min_value)] += 1
 
     for i in range(len(c)):
         if i > 0:
             c[i] = c[i] + c[i-1]
 
-    for number in collection:
-        result[c[number - min_value]-1] = number
-        c[number - min_value] -= 1
+    for number in collection[::-1]:
+        temp = number // exp % 10
+        result[c[temp - abs(min_value)] -1] = number
+        c[temp - abs(min_value)] -= 1
 
     return result
 
-# 基数排序LSD
-def radix_sort(collection):
-    print(collection)
+
+# 基数排序LSD(只考虑正整数)
+def radix_sort_lsd(collection):
+    # print(collection)
     if len(collection) <= 1:
         return collection
 
     max_value, n = get_max_n(collection)
-    print(max_value, n)
+    # print(max_value, n)
 
     if max_value == 0:  # collection = [0, 0, 0, 0, 0]
         return collection
 
     for i in range(n):  # 0, 1, 2
         exp = pow(10, i)  # 1, 10, 100
-        print(exp)
-        counting_sort(collection, exp)
-
-    for number in collection:
-        print(number)
-
-
-
+        # print(exp)
+        collection = counting_sort(collection, exp)
+        # print(collection)
+    return collection
 
 
 if __name__ == '__main__':
     tests = [[], [0], [2], [0, 0, 0, 0], [103, 9, 1, 7, 11, 15, 25, 201, 209, 107, 5]]
     for test in tests:
         print(test)
-        print(get_max_n(test))
-    print()
-    print()
-
-
-
-    unsorted = [103, 9, 1, 7, 11, 15, 25, 201, 209, 107, 5]
-    print(radix_sort(unsorted))
+        print(radix_sort_lsd(test))
+        print()
