@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 '''
 - A linked list is similar to an array, it holds values. However, links in a linked list do not have indexes.
 - This is an example of a double ended, doubly linked list.
@@ -6,19 +8,35 @@
  - Advantages over SLL - IT can be traversed in both forward and backward direction.,Delete operation is more efficent'''
 
 
-class LinkedList:           #making main class named linked list
+class Link:
+    next = None
+    previous = None
+
+    def __init__(self, x):
+        self.value = x
+
+    def displayLink(self):
+        print("{}".format(self.value), end=" ")
+
+
+class LinkedList:
     def __init__(self):
         self.head = None
         self.tail = None
 
     def insertHead(self, x):
-        newLink = Link(x)                            #Create a new link with a value attached to it
-        if(self.isEmpty() == True):                  #Set the first element added to be the tail
+        """
+
+
+        
+        """
+        newLink = Link(x)
+        if self.isEmpty() == True:
             self.tail = newLink
         else:
-            self.head.previous = newLink             # newLink <-- currenthead(head)
-        newLink.next = self.head                     # newLink <--> currenthead(head)
-        self.head = newLink                          # newLink(head) <--> oldhead
+            self.head.previous = newLink
+        newLink.next = self.head
+        self.head = newLink
 
     def deleteHead(self):
         temp = self.head
@@ -57,8 +75,8 @@ class LinkedList:           #making main class named linked list
             current.previous.next = current.next # 1 --> 3
             current.next.previous = current.previous # 1 <--> 3
 
-    def isEmpty(self):                               #Will return True if the list is empty
-        return(self.head is None)
+    def isEmpty(self):
+        return self.head is None
 
     def display(self):                                #Prints contents of the list
         current = self.head
@@ -67,10 +85,3 @@ class LinkedList:           #making main class named linked list
             current = current.next
         print()
 
-class Link:
-    next = None                                       #This points to the link in front of the new link
-    previous = None                                   #This points to the link behind the new link
-    def __init__(self, x):
-        self.value = x
-    def displayLink(self):
-        print("{}".format(self.value), end=" ")
