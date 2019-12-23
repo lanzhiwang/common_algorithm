@@ -74,6 +74,9 @@ class Linked_List:
         (2, ->) (1, ->) (6, ->) (5, None)
         ^
 
+        (2, ->) (1, ->) (6, None)
+        ^
+        (5, None)
 
         """
         tamp = self.Head
@@ -90,6 +93,31 @@ class Linked_List:
         return self.Head is None  # Return if Head is none
 
     def reverse(self):
+        """
+        (2, ->) (1, ->) (6, None)
+        ^
+        current next_node
+        prev = None
+
+        (2, None) (1, ->) (6, None)
+        ^
+        prev      current
+
+        (2, None) (1, ->) (6, None)
+        ^
+        prev      current
+
+        (2, None) (1, <-) (6, None)
+        ^
+                  prev    current
+
+        (2, None) (1, <-) (6, <-)
+        ^
+                          prev     current
+
+        (2, None) (1, <-) (6, <-)
+                          ^
+        """
         prev = None
         current = self.Head
 
