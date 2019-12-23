@@ -1,4 +1,9 @@
-"""Queue represented by a pseudo stack (represented by a list with pop and append)"""
+# -*- coding: utf-8 -*-
+
+"""
+队列由伪堆栈表示（由带有pop和append的列表表示）
+"""
+
 class Queue():
     def __init__(self):
         self.stack = []

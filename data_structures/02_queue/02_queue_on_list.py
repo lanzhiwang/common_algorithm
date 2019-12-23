@@ -1,9 +1,13 @@
-"""Queue represented by a python list"""
+# -*- coding: utf-8 -*-
+
+"""由 python 列表表示的队列
+"""
+
 class Queue():
     def __init__(self):
         self.entries = []
         self.length = 0
-        self.front=0
+        self.front = 0
 
     def __str__(self):
         printed = '<' + str(self.entries)[1:-1] + '>'
