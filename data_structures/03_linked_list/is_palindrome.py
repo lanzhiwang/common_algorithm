@@ -1,3 +1,17 @@
+# -*- coding: utf-8 -*-
+
+"""回文检查
+https://wizardforcel.gitbooks.io/the-art-of-programming-by-july/content/01.04.html
+
+
+快慢指针、链表的翻转、利用快慢指针来判断链表中是否有环（并找出环的入口）
+https://zhuanlan.zhihu.com/p/38521018
+
+
+"""
+
+
+# 使用单链表检测回文
 def is_palindrome(head):
     if not head:
         return True
