@@ -24,11 +24,20 @@ class LinkedList:
         self.head = None
         self.tail = None
 
+    def isEmpty(self):
+        return self.head is None
+
     def insertHead(self, x):
         """
+        insertHead(1)
+        insertHead(2)
+        insertHead(3)
+        insertHead(4)
 
+        1 -p-> 2 -p-> 3 -p-> 4
+          <-n-   <-n-   <-n-
+        tail                 head
 
-        
         """
         newLink = Link(x)
         if self.isEmpty() == True:
@@ -38,49 +47,98 @@ class LinkedList:
         newLink.next = self.head
         self.head = newLink
 
+    def insertTail(self, x):
+        """
+        1 -p-> 2 -p-> 3 -p-> 4
+          <-n-   <-n-   <-n-
+        tail                 head
+
+        insertTail(0)
+
+        0 -p-> 1 -p-> 2 -p-> 3 -p-> 4
+          <-n-  <-n-   <-n-   <-n-
+        tail                       head
+
+        """
+        newLink = Link(x)
+        newLink.next = None
+        self.tail.next = newLink
+        newLink.previous = self.tail
+        self.tail = newLink
+
     def deleteHead(self):
+        """
+        0 -p-> 1 -p-> 2 -p-> 3 -p-> 4
+          <-n-  <-n-   <-n-   <-n-
+        tail                       head
+
+        deleteHead()
+        0 -p-> 1 -p-> 2 -p-> 3
+          <-n-  <-n-   <-n-
+        tail                 head
+
+        ###########################
+
+        o
+        tail
+        head
+
+        """
         temp = self.head
-        self.head = self.head.next                   # oldHead <--> 2ndElement(head)
-        self.head.previous = None                    # oldHead --> 2ndElement(head) nothing pointing at it so the old head will be removed
-        if(self.head is None):
-            self.tail = None                         #if empty linked list
+        self.head = self.head.next
+        self.head.previous = None
+        if self.head is None:
+            self.tail = None
         return temp
 
-    def insertTail(self, x):
-        newLink = Link(x)
-        newLink.next = None                         # currentTail(tail)    newLink -->
-        self.tail.next = newLink                    # currentTail(tail) --> newLink -->
-        newLink.previous = self.tail                #currentTail(tail) <--> newLink -->
-        self.tail = newLink                         # oldTail <--> newLink(tail) -->
-
     def deleteTail(self):
+        """
+        0 -p-> 1 -p-> 2 -p-> 3 -p-> 4
+          <-n-  <-n-   <-n-   <-n-
+        tail                       head
+
+        deleteTail()
+        1 -p-> 2 -p-> 3 -p-> 4
+          <-n-   <-n-   <-n-
+        tail                 head
+
+        ###########################
+
+        o
+        tail
+        head
+
+        """
         temp = self.tail
-        self.tail = self.tail.previous              # 2ndLast(tail) <--> oldTail --> None
-        self.tail.next = None                       # 2ndlast(tail) --> None
+        self.tail = self.tail.previous
+        self.tail.next = None
         return temp
 
     def delete(self, x):
+        """
+        0 -p-> 1 -p-> 2 -p-> 3 -p-> 4
+          <-n-  <-n-   <-n-   <-n-
+        tail                       head
+
+        delete(2)
+
+        """
         current = self.head
 
-        while(current.value != x):                  # Find the position to delete
+        while current.value != x:
             current = current.next
 
-        if(current == self.head):
+        if current == self.head:
             self.deleteHead()
-
-        elif(current == self.tail):
+        elif current == self.tail:
             self.deleteTail()
+        else:
+            current.previous.next = current.next
+            current.next.previous = current.previous
 
-        else: #Before: 1 <--> 2(current) <--> 3
-            current.previous.next = current.next # 1 --> 3
-            current.next.previous = current.previous # 1 <--> 3
-
-    def isEmpty(self):
-        return self.head is None
-
-    def display(self):                                #Prints contents of the list
+    def display(self):
         current = self.head
-        while(current != None):
+        while current != None:
             current.displayLink()
             current = current.next
         print()
