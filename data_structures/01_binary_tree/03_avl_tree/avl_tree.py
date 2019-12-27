@@ -263,11 +263,13 @@ if __name__ == "__main__":
     t.traversale()
     l = list(range(10))
     random.shuffle(l)
+    print(l)
     for i in l:
         t.insert(i)
         t.traversale()
         
     random.shuffle(l)
+    print(l)
     for i in l:
         t.del_node(i)
         t.traversale()

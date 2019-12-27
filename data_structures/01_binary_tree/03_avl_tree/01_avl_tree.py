@@ -99,3 +99,14 @@ def my_max(a, b):
         return a
     return b
 
+
+def getRightMost(root):
+    while root.getright() is not None:
+        root = root.getright()
+    return root.getdata()
+
+
+def getLeftMost(root):
+    while root.getleft() is not None:
+        root = root.getleft()
+    return root.getdata()
