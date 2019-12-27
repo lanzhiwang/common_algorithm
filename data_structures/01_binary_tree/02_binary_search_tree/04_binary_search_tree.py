@@ -10,6 +10,10 @@ import sys, inspect
 判断某个值是否存在
 
 获得最大值和最小值
+
+删除节点
+https://blog.csdn.net/zxnsirius/article/details/52131433
+
 '''
 
 
@@ -62,7 +66,6 @@ class Node:
         else:
             return 'label: %s, left: %s, right: %s' % (
                 self.getLabel(), None, None)
-
 
 
 class BinarySearchTree:
@@ -133,6 +136,40 @@ class BinarySearchTree:
     def getRoot(self):
         return self.root
 
+    def delete(self, label):
+        if not self.empty():
+            node = self.getNode(label)
+            if node is not None:
+                if node.getLeft() is None and node.getRight() is None:
+                    self.__reassignNodes(node, None)
+                    node = None
+
+                elif node.getLeft() is None and node.getRight() is not None:
+                    self.__reassignNodes(node, node.getRight())
+
+                elif node.getLeft() is not None and node.getRight() is None:
+                    self.__reassignNodes(node, node.getLeft())
+
+                else:
+                    tmpNode = self.getMax(node.getLeft())
+                    self.delete(tmpNode.getLabel())
+                    node.setLabel(tmpNode.getLabel())
+
+    def __reassignNodes(self, node, newChildren):
+        if newChildren is not None:
+            newChildren.setParent(node.getParent())
+
+        if node.getParent() is not None:
+            if self.__isRightChildren(node):
+                node.getParent().setRight(newChildren)
+            else:
+                node.getParent().setLeft(newChildren)
+
+    def __isRightChildren(self, node):
+        if node == node.getParent().getRight():
+            return True
+        return False
+
     def __InOrderTraversal(self, curr_node):
         nodeList = []
         if curr_node is not None:
@@ -147,25 +184,6 @@ class BinarySearchTree:
         for x in list:
             str = str + " " + x.getLabel().__str__()
         return str
-
-
-"""
-中序遍历
-"""
-def display(tree): #In Order traversal of the tree
-
-    if tree is None:
-        return
-
-    if tree.getLeft() is not None:
-        display(tree.getLeft())
-
-    print(tree.getLabel())
-
-    if tree.getRight() is not None:
-        display(tree.getRight())
-
-    return
 
 
 def testBinarySearchTree():
@@ -198,16 +216,14 @@ def testBinarySearchTree():
     t.insert(4)
     t.insert(7)
 
-    #Prints all the elements of the list in order traversal
     print(t.__str__())  # 8 3 1 6 4 7 10 14 13
-    display(t.getRoot())
 
-    if (t.getNode(6) is not None):
+    if t.getNode(6) is not None:
         print("The label 6 exists")
     else:
         print("The label 6 doesn't exist")
 
-    if (t.getNode(-1) is not None):
+    if t.getNode(-1) is not None:
         print("The label -1 exists")
     else:
         print("The label -1 doesn't exist")
@@ -216,6 +232,14 @@ def testBinarySearchTree():
         print(("Max Value: ", t.getMax().getLabel()))
         print(("Min Value: ", t.getMin().getLabel()))
 
+    t.delete(13)
+    t.delete(10)
+    t.delete(8)
+    t.delete(3)
+    t.delete(6)
+    t.delete(14)
+
+    print(t.__str__())  # 7 1 4
 
 
 if __name__ == "__main__":
