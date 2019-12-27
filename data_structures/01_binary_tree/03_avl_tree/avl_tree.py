@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
+
 '''
 An auto-balanced binary tree!
 平衡二叉搜索树
 '''
+
+
 import math
 import random
+
+
 class my_queue:
     def __init__(self):
         self.data = []
@@ -25,7 +30,8 @@ class my_queue:
         print(self.data)
         print("**************")
         print(self.data[self.head:self.tail])
-        
+
+
 class my_node:
     def __init__(self,data):
         self.data = data
@@ -53,16 +59,17 @@ class my_node:
         self.height = height
         return
 
+
 def getheight(node):
     if node is None:
         return 0
     return node.getheight()
 
+
 def my_max(a,b):
     if a > b:
         return a
     return b
-
 
 
 def leftrotation(node):
@@ -87,6 +94,7 @@ def leftrotation(node):
     ret.setheight(h2)
     return ret
 
+
 def rightrotation(node):
     '''
         a mirror symmetry rotation of the leftrotation
@@ -101,6 +109,7 @@ def rightrotation(node):
     ret.setheight(h2)
     return ret
 
+
 def rlrotation(node):
     r'''
             A              A                    Br      
@@ -114,6 +123,7 @@ def rlrotation(node):
     '''
     node.setleft(rightrotation(node.getleft()))
     return leftrotation(node)
+
 
 def lrrotation(node):
     node.setright(leftrotation(node.getright()))
@@ -141,14 +151,18 @@ def insert_node(node,data):
     node.setheight(h1)
     return node
 
+
 def getRightMost(root):
     while root.getright() is not None:
         root = root.getright()
     return root.getdata()
+
+
 def getLeftMost(root):
     while root.getleft() is not None:
         root = root.getleft()
     return root.getdata()
+
 
 def del_node(root,data):
     if root.getdata() == data:
@@ -186,6 +200,7 @@ def del_node(root,data):
     height = my_max(getheight(root.getright()),getheight(root.getleft())) + 1
     root.setheight(height)
     return root
+
 
 class AVLtree:
     def __init__(self):
@@ -241,6 +256,8 @@ class AVLtree:
         getheight(None)
         print("****")
         self.getheight()
+
+
 if __name__ == "__main__":
     t = AVLtree()
     t.traversale()
