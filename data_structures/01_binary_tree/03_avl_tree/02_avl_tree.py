@@ -82,6 +82,11 @@ def rlrotation(node):
 
     node = A
     '''
+
+    # b = node.getleft()
+    # br = rightrotation(b)
+    # a.setleft(br)
+    # br = leftrotation(a)
     node.setleft(rightrotation(node.getleft()))
     return leftrotation(node)
 
@@ -100,6 +105,10 @@ def lrrotation(node):
 
     node = A
     '''
+    # c = node.getright()
+    # cl = leftrotation(c)
+    # a.setright(cl)
+    # cl = rightrotation(a)
     node.setright(leftrotation(node.getright()))
     return rightrotation(node)
 
