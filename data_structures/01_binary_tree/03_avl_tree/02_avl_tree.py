@@ -19,6 +19,29 @@ def my_max(a, b):
 
 def leftrotation(node):
     r'''
+    需要左旋转的情况：左子树的高度 - 右子树的高度 = 2
+    左子树的高度 | 右子树的高度
+    ---------- | ----------
+    2             0
+    3             1
+    4             2
+    ...
+
+            A              B
+           /              / \
+          B       -->    UB  A
+         /
+        UB
+
+
+        7-2 node         6-2            6-2
+        /               /  \            /  \
+      6-2 ret          5-1 7-2         5-1 7-1
+      /
+     5-1
+
+    #######################################################
+
             A                      B
            / \                    / \
           B   C                  Bl  A
@@ -27,18 +50,15 @@ def leftrotation(node):
        /
      UB
 
-    UB = unbalanced node
 
-    node = A
-    ret = B
-
-             A-4                        B-3
-           /     \                    /     \
-          B-3   C-3                  Bl-2    A-4
-         /   \              -->     /      /    \
-        Bl-2  Br-2                 UB-1   Br-2  C-3
+            A-3                         B-3                      B-3
+           /   \                       /    \                   /    \
+          B-3   C-1                  Bl-2   A-3                Bl-2   A-2
+         /   \            -->        /      / \                /      / \
+        Bl-2 Br-1                 UB-1   Br-1  C-1           UB-1   Br-1  C-1
        /
      UB-1
+
 
     '''
     print("left rotation node:", node.getdata())
@@ -54,6 +74,28 @@ def leftrotation(node):
 
 def rightrotation(node):
     r'''
+    需要右旋转的情况：左子树的高度 - 右子树的高度 = -2
+    左子树的高度 | 右子树的高度
+    ---------- | ----------
+    0            2
+    1            3
+    2            4
+    ...
+
+     A                      C
+      \                    / \
+       C       -->        A   Cr
+        \
+         Cr
+
+    7-2 node           8-2             8-2
+      \               /   \            / \
+      8-2 ret        7-2  9-1        7-1  9-1
+        \
+        9-1
+
+    #######################################################
+
         A                      C
        / \                    / \
       B   C                  A   Cr
@@ -62,10 +104,16 @@ def rightrotation(node):
              \
              UB
 
-    UB = unbalanced node
 
-    node = A
-    ret = C
+         A-3                         C-3                   C-3
+       /    \                       /    \                /   \
+      B-1   C-3                    A-3   Cr-2           A-2    Cr-2
+            / \       -->         /  \     \           /  \     \
+         Cl-1  Cr-2             B-1  Cl-1  UB-1      B-1  Cl-1  UB-1
+                \
+                UB-1
+
+
     '''
     print("right rotation node:", node.getdata())
     ret = node.getright()
@@ -80,6 +128,29 @@ def rightrotation(node):
 
 def rlrotation(node):
     r'''
+    需要先右旋转，再左旋转的情况：左子树的高度 - 右子树的高度 = 2
+    左子树的高度 | 右子树的高度
+    ---------- | ----------
+    2             0
+    3             1
+    4             2
+    ...
+
+      A                 A          UB
+     /                 /          /  \
+    B       -->       UB   -->   B    A
+     \               /
+      UB            B
+
+
+      5-2               5-2         4-2
+     /                 /            /  \
+    3-2       -->     4-2   -->    3-1 5-1
+     \               /
+      4-1           3-1
+
+    #######################################################
+
             A              A                    Br
            / \            / \                  /  \
           B   C    RR    Br  C       LR       B    A
@@ -87,21 +158,46 @@ def rlrotation(node):
         Bl  Br         B   UB              Bl    UB  C
              \        /
              UB     Bl
+
     RR = rightrotation   LR = leftrotation
 
-    node = A
-    '''
+              A-3               A-3                       Br-3
+             /   \             /   \                   /       \
+           B-3   C-1    RR    Br-3  C-1     LR       B-2       A-2
+         /    \       -->     /  \         -->        /       /   \
+        Bl-1  Br-2          B-2   UB-1              Bl-1    UB-1  C-1
+                \            /
+                UB-1       Bl-1
 
-    # b = node.getleft()
-    # br = rightrotation(b)
-    # a.setleft(br)
-    # br = leftrotation(a)
+    '''
     node.setleft(rightrotation(node.getleft()))
     return leftrotation(node)
 
 
 def lrrotation(node):
-    r'''
+    r"""
+    需要先左旋转，再右旋转的情况：左子树的高度 - 右子树的高度 = -2
+    左子树的高度 | 右子树的高度
+    ---------- | ----------
+    0             2
+    1             3
+    2             4
+    ...
+
+     A            A                  B
+      \            \                / \
+       C     -->    B     -->      A   C
+      /              \
+     B                C
+
+     A-2            A-2                   B-2
+      \               \                  /   \
+       C-2     -->    B-2     -->      A-1   C-1
+      /                 \
+     B-1                C-1
+
+    #######################################################
+
         A                   A                    Cl
        / \                 / \                   / \
       B   C               B  Cl                 A   C
@@ -112,13 +208,14 @@ def lrrotation(node):
 
     UB = unbalanced node
 
-    node = A
-    '''
-    # c = node.getright()
-    # cl = leftrotation(c)
-    # a.setright(cl)
-    # cl = rightrotation(a)
+             A-3                        A-3                        Cl-3
+            /  \                      /    \                      /     \
+         B-1   C-3                   B-1  Cl-3                  A-2     C-2
+             /    \    -->                /   \         -->    /   \      \
+           Cl-2  Cr-1                   UB-1  C-2             B-1  UB-1  Cr-1
+           /                                    \
+         UB-1                                  Cr-1
+
+    """
     node.setright(leftrotation(node.getright()))
     return rightrotation(node)
-
-
