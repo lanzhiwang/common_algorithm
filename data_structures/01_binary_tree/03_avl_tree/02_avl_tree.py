@@ -31,6 +31,15 @@ def leftrotation(node):
 
     node = A
     ret = B
+
+             A-4                        B-3
+           /     \                    /     \
+          B-3   C-3                  Bl-2    A-4
+         /   \              -->     /      /    \
+        Bl-2  Br-2                 UB-1   Br-2  C-3
+       /
+     UB-1
+
     '''
     print("left rotation node:", node.getdata())
     ret = node.getleft()
