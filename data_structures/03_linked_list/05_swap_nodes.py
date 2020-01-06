@@ -18,7 +18,7 @@ class Linkedlist:
     def print_list(self):
         temp = self.head
         while temp is not None:
-            print(temp.data)
+            print(temp.data, end=' ')
             temp = temp.next
 
     """adding nodes
@@ -87,25 +87,18 @@ class Linkedlist:
             while D1 is not None and D1.data != d1:
                 prevD1 = D1
                 D1 = D1.next
-            # find d2
+                # find d2
             D2 = self.head
             while D2 is not None and D2.data != d2:
                 prevD2 = D2
                 D2 = D2.next
-
             if D1 is None and D2 is None:
                 return
-
-
-
-
             # if D1 is head
             if prevD1 is not None:
                 prevD1.next = D2
             else:
                 self.head = D2
-
-
             # if D2 is head
             if prevD2 is not None:
                 prevD2.next = D1
@@ -115,21 +108,46 @@ class Linkedlist:
             D1.next = D2.next
             D2.next = temp
 
+    def swapNodes2(self, d1, d2):
+        if d1 == d2:
+            return
+        else:
+            D1 = self.head
+            while D1 is not None and D1.data != d1:
+                D1 = D1.next
+
+            D2 = self.head
+            while D2 is not None and D2.data != d2:
+                D2 = D2.next
+
+            if D1 is None or D2 is None:
+                return
+
+            D1.data, D2.data = D2.data, D1.data
+
 # swapping code ends here
 
 
-
 if __name__ == '__main__':
-    list = Linkedlist()
-    list.push(5)
-    list.push(4)
-    list.push(3)
-    list.push(2)
-    list.push(1)
+    test_list = []
+    for i in [0, 1, 2, 3, 4, 5]:
+        for j in [0, 1, 2, 3, 4, 5]:
+            test_list.append((i, j))
+    print(test_list)
 
-    list.print_list()  # 1 2 3 4 5
+    for test in test_list:
+        list = Linkedlist()
+        list.push(5)
+        list.push(4)
+        list.push(3)
+        list.push(2)
+        list.push(1)
+        list.print_list()  # 1 2 3 4 5
+        print()
+        print(test)
+        list.swapNodes2(*test)
+        print("After swapping")
+        list.print_list()
+        print()
+        print()
 
-    list.swapNodes(1, 4)
-    print("After swapping")
-    list.print_list()
-    # 4 2 3 1 5
