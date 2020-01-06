@@ -45,7 +45,7 @@ def heapify(unsorted, index, heap_size):
 
     if largest != index:
         unsorted[largest], unsorted[index] = unsorted[index], unsorted[largest]
-        heapify(unsorted, largest, heap_size)
+        # heapify(unsorted, largest, heap_size)
 
 
 if __name__ == '__main__':
