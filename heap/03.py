@@ -27,7 +27,7 @@ def heapify(unsorted, index, heap_size):
 
     if largest != index:
         unsorted[largest], unsorted[index] = unsorted[index], unsorted[largest]
-        # heapify(unsorted, largest, heap_size)
+        heapify(unsorted, largest, heap_size)
 
 
 if __name__ == '__main__':
@@ -35,14 +35,14 @@ if __name__ == '__main__':
     min_heap = [1, 6, 4, 8, 7, 6, 5, 13, 12, 11]
     min_heap.append(5)
 
-    """
+    r"""
              1
            /   \ 
           6     4
        /    \  / \
-      8     7  6 5
+      8     7  6  5
      / \   / \
-    13 12 11 5
+    13 12 11  5
     
     """
     heapify(min_heap, 4, len(min_heap))
