@@ -1,3 +1,7 @@
+"""
+树状数组或二叉索引树（Binary Indexed Tree, Fenwick Tree）
+
+"""
 class FenwickTree:
 
     def __init__(self, SIZE): # create fenwick tree with size SIZE

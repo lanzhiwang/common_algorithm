@@ -1,3 +1,8 @@
+"""
+树堆（Treap）
+
+"""
+
 from random import random
 from typing import Tuple
 

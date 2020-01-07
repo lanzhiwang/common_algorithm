@@ -1,3 +1,7 @@
+"""
+Segment Tree 线段树
+
+"""
 import math
 
 class SegmentTree:
