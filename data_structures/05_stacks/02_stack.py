@@ -59,10 +59,28 @@ if __name__ == '__main__':
 
     print('Stack demonstration:\n')
     print('Initial stack: ' + str(stack))
+
     print('pop(): ' + str(stack.pop()))
     print('After pop(), the stack is now: ' + str(stack))
+
     print('peek(): ' + str(stack.peek()))
+    print('After peek(), the stack is now: ' + str(stack))
+
     stack.push(100)
     print('After push(100), the stack is now: ' + str(stack))
+
     print('is_empty(): ' + str(stack.is_empty()))
     print('size(): ' + str(stack.size()))
+
+"""
+Stack demonstration:
+
+Initial stack: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+pop(): 9
+After pop(), the stack is now: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+peek(): 8
+After peek(), the stack is now: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+After push(100), the stack is now: [0, 1, 2, 3, 4, 5, 6, 7, 8, 100]
+is_empty(): False
+size(): 10
+"""
