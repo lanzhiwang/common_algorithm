@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import copy
+# import copy
 
 """
 快速排序 - 从小到大升序排序
@@ -61,60 +61,84 @@ i j
 """
 
 
-def quick_sort(array):
-    len_array = len(array)
+def quick_sort(array, left, right):
+    if right <= left:
+        return
+    i = left
+    j = right
+    while i < j:
+        for k in range(right, left-1, -1):
+            j = k
+            if array[k] < array[left]:
+                break
 
-    if len_array <= 1:
-        return array
+        for k in range(left, right+1):
+            i = k
+            if array[k] > array[left]:
+                break
 
-    i = 0
-    j = len_array - 1
+        if i < j:
+            array[i], array[j] = array[j], array[i]
+
+    else:
+        array[left], array[j] = array[j], array[left]
+
+    quick_sort(array, left, j-1)
+    quick_sort(array, j+1, right)
+
+
+def quick_sort_02(array, left, right):
+    # print('*****', array, left, right)
+
+    if right <= left:
+        return
+
+    i = left
+    j = right
     while i < j:
         # print('while')
         # print("i=%s, j=%s" % (i, j))
-        for k in range(len_array-1, -1, -1):
-            if array[k] < array[0]:
-                j = k
+        for k in range(right, left-1, -1):
+            j = k
+            if array[k] < array[left]:
                 break
-            else:
-                continue
         # print("i=%s, array[%s]=%s, j=%s, array[%s]=%s" % (i, i, array[i], j, j, array[j]))
 
-        for k in range(len_array):
-            if array[k] > array[0]:
-                i = k
+        for k in range(left, right+1):
+            i = k
+            if array[k] > array[left]:
                 break
-            else:
-                continue
         # print("i=%s, array[%s]=%s, j=%s, array[%s]=%s" % (i, i, array[i], j, j, array[j]))
 
         if i < j:
-            temp = array[i]
-            array[i] = array[j]
-            array[j] = temp
-
-        # print(array)
+            array[i], array[j] = array[j], array[i]
+            # print(array)
 
     else:
         # print('else while')
-        temp = array[0]
-        array[0] = array[j]
-        array[j] = temp
+        array[left], array[j] = array[j], array[left]
         # print(array)
 
-    left_array = array[0:j]
-    right_array = array[j+1:]
-    print('left_array: %s' % left_array)
-    print('right_array: %s' % right_array)
+    # left_array = array[0:j]
+    # right_array = array[j+1:]
+    # print('left_array: %s' % left_array)
+    # print('right_array: %s' % right_array)
+    # print(array)
 
-    # quick_sort(left_array)
-    # quick_sort(right_array)
+    quick_sort(array, left, j-1)
+    quick_sort(array, j+1, right)
 
-    return quick_sort(left_array) + [array[j]] + quick_sort(right_array)
+    # print(left_array + [array[j]] + right_array)
+    # return left_array + [array[j]] + right_array
 
 
-
-array = [6, 1, 2, 7, 9, 3, 4, 5, 10, 8]
-print(array)
-print(quick_sort(array))
-print(array)
+for unsorted in [
+    [], [0], [2], [3, 5], [5, 3], [5, 5], [0, 0, 0, 0], [1, 1, 1, 1], [2, 2, 3, 5],
+    [2, 5, 3, 0, 2, 3, 0, 3], [0, 2, 2, 3, 5],
+    [103, 9, 1, 7, 11, 15, 25, 201, 209, 107, 5],
+    [6, 1, 2, 7, 9, 3, 4, 5, 10, 8],
+    [-45, -2, -5]
+]:
+    print(unsorted)
+    quick_sort(unsorted, 0, len(unsorted)-1)
+    print(unsorted)
