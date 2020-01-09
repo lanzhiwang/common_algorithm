@@ -61,33 +61,7 @@ i j
 """
 
 
-def quick_sort(array, left, right):
-    if right <= left:
-        return
-    i = left
-    j = right
-    while i < j:
-        for k in range(right, left-1, -1):
-            j = k
-            if array[k] < array[left]:
-                break
-
-        for k in range(left, right+1):
-            i = k
-            if array[k] > array[left]:
-                break
-
-        if i < j:
-            array[i], array[j] = array[j], array[i]
-
-    else:
-        array[left], array[j] = array[j], array[left]
-
-    quick_sort(array, left, j-1)
-    quick_sort(array, j+1, right)
-
-
-def quick_sort_02(array, left, right):
+def quick_sort_01(array, left, right):
     # print('*****', array, left, right)
 
     if right <= left:
@@ -125,11 +99,37 @@ def quick_sort_02(array, left, right):
     # print('right_array: %s' % right_array)
     # print(array)
 
-    quick_sort(array, left, j-1)
-    quick_sort(array, j+1, right)
+    quick_sort_01(array, left, j-1)
+    quick_sort_01(array, j+1, right)
 
     # print(left_array + [array[j]] + right_array)
     # return left_array + [array[j]] + right_array
+
+
+def quick_sort_02(array, left, right):
+    if right <= left:
+        return
+    i = left
+    j = right
+    while i < j:
+        for k in range(right, left-1, -1):
+            j = k
+            if array[k] < array[left]:
+                break
+
+        for k in range(left, right+1):
+            i = k
+            if array[k] > array[left]:
+                break
+
+        if i < j:
+            array[i], array[j] = array[j], array[i]
+
+    else:
+        array[left], array[j] = array[j], array[left]
+
+    quick_sort_02(array, left, j-1)
+    quick_sort_02(array, j+1, right)
 
 
 for unsorted in [
@@ -140,5 +140,5 @@ for unsorted in [
     [-45, -2, -5]
 ]:
     print(unsorted)
-    quick_sort(unsorted, 0, len(unsorted)-1)
+    quick_sort_02(unsorted, 0, len(unsorted)-1)
     print(unsorted)
