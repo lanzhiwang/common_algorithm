@@ -28,17 +28,25 @@
 
 
 def insertion_sort(collection):
+    length = len(collection)
+    if length <= 1:
+        return
     for loop_index in range(1, len(collection)):
         pivot = collection[loop_index]
+        print('loop_index: %s, pivot: %s' % (loop_index, pivot))
 
         insertion_index = loop_index - 1
         while insertion_index >= 0:
+            print('insertion_index: %s' % insertion_index)
+            print('collection: %s' % collection)
             if collection[insertion_index] > pivot:
                 collection[insertion_index+1] = collection[insertion_index]
                 insertion_index -= 1
             else:
                 collection[insertion_index + 1] = pivot
                 break
+            print('insertion_index: %s' % insertion_index)
+            print('collection: %s' % collection)
         else:
             collection[insertion_index+1] = pivot
 
