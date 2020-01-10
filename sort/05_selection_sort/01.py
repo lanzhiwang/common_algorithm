@@ -45,14 +45,38 @@ N = 8
 
 def selection_sort(collection):
     for i in range(0, len(collection)-1):
-        min_element = min(collection[i:])
-        min_element_index = collection.index(min_element)
+        # print('i: %s' % i)
+        # print('collection: %s' % collection)
+
+        # temp = collection[i+1:]
+        # min_element = min(temp)
+        # min_element_index = temp.index(min_element) + i + 1
+        # 或者
+        min_element = min(collection[i+1:])
+        min_element_index = collection.index(min_element, i)
+
+        # print('min_element: %s' % min_element)
+        # print('min_element_index: %s' % min_element_index)
+
         if min_element < collection[i]:
             collection[i], collection[min_element_index] = collection[min_element_index], collection[i]
 
+        # print('collection: %s' % collection)
+
 
 if __name__ == '__main__':
-    user_input = '99 5 36 7 22 17 46 12'
-    unsorted = [int(item) for item in user_input.split(' ')]
+    unsorted = [2, 5, 3, 0, 2, 3, 0, 3]
     selection_sort(unsorted)
     print(unsorted)
+
+    for unsorted in [
+        [], [0], [2], [3, 5], [5, 3], [5, 5], [0, 0, 0, 0], [1, 1, 1, 1], [2, 2, 3, 5],
+        [2, 5, 3, 0, 2, 3, 0, 3], [0, 2, 2, 3, 5],
+        [103, 9, 1, 7, 11, 15, 25, 201, 209, 107, 5],
+        [6, 1, 2, 7, 9, 3, 4, 5, 10, 8],
+        [-45, -2, -5]
+    ]:
+        print(unsorted)
+        selection_sort(unsorted)
+        print(unsorted)
+        print()
