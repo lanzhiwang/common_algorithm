@@ -9,9 +9,17 @@
 def bubble_sort(collection, index):
     if index == 0 or len(collection) <= 1:
         return
-    max_element = max(collection[0:index+1])
+    max_element = None
+    for i in range(0, index+1):
+        if max_element is None:
+            max_element = collection[i]
+        else:
+            if collection[i] > max_element:
+                max_element = collection[i]
+
     i = collection.index(max_element)
-    collection[index], collection[i] = collection[i], collection[index]
+    if i != index:
+        collection[index], collection[i] = collection[i], collection[index]
     bubble_sort(collection, index-1)
 
 
