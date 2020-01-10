@@ -70,8 +70,8 @@ def quick_sort_3partition(sorting, left, right):
     b = right
     pivot = sorting[left]
     while i <= b:
-        print('a: %s, b: %s, i: %s' % (a, b, i))
-        print(sorting)
+        # print('a: %s, b: %s, i: %s' % (a, b, i))
+        # print(sorting)
         if sorting[i] < pivot:
             sorting[a], sorting[i] = sorting[i], sorting[a]
             a += 1
@@ -81,14 +81,27 @@ def quick_sort_3partition(sorting, left, right):
             b -= 1
         else:
             i += 1
-        print('a: %s, b: %s, i: %s' % (a, b, i))
-        print(sorting)
-        print()
+        # print('a: %s, b: %s, i: %s' % (a, b, i))
+        # print(sorting)
+        # print()
     quick_sort_3partition(sorting, left, a - 1)
     quick_sort_3partition(sorting, b + 1, right)
 
 
 if __name__ == '__main__':
-    unsorted = [6, 1, 2, 7, 9, 3, 4, 5, 10, 8]
-    quick_sort_3partition(unsorted, 0, len(unsorted)-1)
-    print(unsorted)
+    # unsorted = [6, 1, 2, 7, 9, 3, 4, 5, 10, 8]
+    # quick_sort_3partition(unsorted, 0, len(unsorted)-1)
+    # print(unsorted)
+
+
+    for unsorted in [
+        [], [0], [2], [3, 5], [5, 3], [5, 5], [0, 0, 0, 0], [1, 1, 1, 1], [2, 2, 3, 5],
+        [2, 5, 3, 0, 2, 3, 0, 3], [0, 2, 2, 3, 5],
+        [103, 9, 1, 7, 11, 15, 25, 201, 209, 107, 5],
+        [6, 1, 2, 7, 9, 3, 4, 5, 10, 8],
+        [-45, -2, -5]
+    ]:
+        print(unsorted)
+        quick_sort_3partition(unsorted, 0, len(unsorted) - 1)
+        print(unsorted)
+        print()
