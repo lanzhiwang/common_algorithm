@@ -5,58 +5,64 @@
 https://github.com/lanzhiwang/Python-Algorithms/blob/master/sorts/quick_sort_3_partition.py
 
 快速排序 - 从小到大升序排序
-array 6 1 6 2 7 9 3 4 5 10 8
+array 6, 1, 2, 7, 9, 3, 4, 5, 10, 8
 
 pivot = 6
-i = 0
-6 1 6 2 7 9 3 4 5 10 8
-a                    b
+a: 0, b: 9, i: 0
+[6, 1, 2, 7, 9, 3, 4, 5, 10, 8]
+a: 0, b: 9, i: 1
+[6, 1, 2, 7, 9, 3, 4, 5, 10, 8]
 
-i = 1
-6 1 6 2 7 9 3 4 5 10 8
-a                    b
+a: 0, b: 9, i: 1
+[6, 1, 2, 7, 9, 3, 4, 5, 10, 8]
+a: 1, b: 9, i: 2
+[1, 6, 2, 7, 9, 3, 4, 5, 10, 8]
 
-i = 2
-1 6 6 2 7 9 3 4 5 10 8
-  a                  b
+a: 1, b: 9, i: 2
+[1, 6, 2, 7, 9, 3, 4, 5, 10, 8]
+a: 2, b: 9, i: 3
+[1, 2, 6, 7, 9, 3, 4, 5, 10, 8]
 
-i = 3
-1 6 6 2 7 9 3 4 5 10 8
-  a                  b
+a: 2, b: 9, i: 3
+[1, 2, 6, 7, 9, 3, 4, 5, 10, 8]
+a: 2, b: 8, i: 3
+[1, 2, 6, 8, 9, 3, 4, 5, 10, 7]
 
-i = 4
-1 2 6 6 7 9 3 4 5 10 8
-      a              b
+a: 2, b: 8, i: 3
+[1, 2, 6, 8, 9, 3, 4, 5, 10, 7]
+a: 2, b: 7, i: 3
+[1, 2, 6, 10, 9, 3, 4, 5, 8, 7]
 
-i = 4
-1 2 6 6 8 9 3 4 5 10 7
-      a           b
+a: 2, b: 7, i: 3
+[1, 2, 6, 10, 9, 3, 4, 5, 8, 7]
+a: 2, b: 6, i: 3
+[1, 2, 6, 5, 9, 3, 4, 10, 8, 7]
 
-i = 4
-1 2 6 6 10 9 3 4 5 8 7
-      a          b
+a: 2, b: 6, i: 3
+[1, 2, 6, 5, 9, 3, 4, 10, 8, 7]
+a: 3, b: 6, i: 4
+[1, 2, 5, 6, 9, 3, 4, 10, 8, 7]
 
-i = 4
-1 2 6 6 5 9 3 4 10 8 7
-      a       b
+a: 3, b: 6, i: 4
+[1, 2, 5, 6, 9, 3, 4, 10, 8, 7]
+a: 3, b: 5, i: 4
+[1, 2, 5, 6, 4, 3, 9, 10, 8, 7]
 
-i = 5
-1 2 6 5 6 9 3 4 10 8 7
-        a     b
+a: 3, b: 5, i: 4
+[1, 2, 5, 6, 4, 3, 9, 10, 8, 7]
+a: 4, b: 5, i: 5
+[1, 2, 5, 4, 6, 3, 9, 10, 8, 7]
 
-i = 5
-1 2 6 5 6 4 3 9 10 8 7
-        a   b
-
-i = 5
-1 2 6 5 4 6 3 9 10 8 7
-          a b
-
-i = 6
-1 2 6 5 4 3 6 9 10 8 7
-            ab
+a: 4, b: 5, i: 5
+[1, 2, 5, 4, 6, 3, 9, 10, 8, 7]
+a: 5, b: 5, i: 6
 [1, 2, 5, 4, 3, 6, 9, 10, 8, 7]
+
+[1, 2, 5, 4, 3, 6, 9, 10, 8, 7]
+
 """
+
+
 def quick_sort_3partition(sorting, left, right):
     if right <= left:
         return
@@ -64,6 +70,8 @@ def quick_sort_3partition(sorting, left, right):
     b = right
     pivot = sorting[left]
     while i <= b:
+        print('a: %s, b: %s, i: %s' % (a, b, i))
+        print(sorting)
         if sorting[i] < pivot:
             sorting[a], sorting[i] = sorting[i], sorting[a]
             a += 1
@@ -73,6 +81,9 @@ def quick_sort_3partition(sorting, left, right):
             b -= 1
         else:
             i += 1
+        print('a: %s, b: %s, i: %s' % (a, b, i))
+        print(sorting)
+        print()
     quick_sort_3partition(sorting, left, a - 1)
     quick_sort_3partition(sorting, b + 1, right)
 
