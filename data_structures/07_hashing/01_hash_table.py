@@ -1,4 +1,18 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+碰撞处理(colision resolution)
+
+开放寻址法
+    线性探测(linear probing) 每一次只搜寻一个 Slot
+    平方探测(quadratic probing) 如果一开始的 have value 为 h 的话，则后续的探测地址为 h+1，h+4，h+9，h+16
+链表
+
+
+"""
+
+
 from number_theory.prime_numbers import next_prime
 
 
