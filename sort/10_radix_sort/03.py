@@ -101,8 +101,13 @@ def radix_sort_msd_help(collection):
 
 
 if __name__ == '__main__':
-    tests = [[], [0], [2], [0, 0, 0, 0], [103, 9, 1, 7, 11, 15, 25, 201, 209, 107, 5]]
-    for test in tests:
-        print(test)
-        print(radix_sort_msd_help(test))
+    for unsorted in [
+        [], [0], [2], [3, 5], [5, 3], [5, 5], [0, 0, 0, 0], [1, 1, 1, 1], [2, 2, 3, 5],
+        [2, 5, 3, 0, 2, 3, 0, 3], [0, 2, 2, 3, 5],
+        [103, 9, 1, 7, 11, 15, 25, 201, 209, 107, 5],
+        [6, 1, 2, 7, 9, 3, 4, 5, 10, 8],
+    ]:
+        print(unsorted)
+        print(radix_sort_msd_help(unsorted))
         print()
+

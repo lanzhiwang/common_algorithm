@@ -119,7 +119,7 @@ def counting_sort(collection, exp):
     c = [0] * (max_value - min_value + 1)
 
     for number in numbers:
-        c[number - abs(min_value)] += 1
+        c[number - min_value] += 1
 
     for i in range(len(c)):
         if i > 0:
@@ -127,8 +127,8 @@ def counting_sort(collection, exp):
 
     for number in collection[::-1]:
         temp = number // exp % 10
-        result[c[temp - abs(min_value)] -1] = number
-        c[temp - abs(min_value)] -= 1
+        result[c[temp - min_value] -1] = number
+        c[temp - min_value] -= 1
 
     return result
 
@@ -154,8 +154,12 @@ def radix_sort_lsd(collection):
 
 
 if __name__ == '__main__':
-    tests = [[], [0], [2], [0, 0, 0, 0], [103, 9, 1, 7, 11, 15, 25, 201, 209, 107, 5]]
-    for test in tests:
-        print(test)
-        print(radix_sort_lsd(test))
+    for unsorted in [
+        [], [0], [2], [3, 5], [5, 3], [5, 5], [0, 0, 0, 0], [1, 1, 1, 1], [2, 2, 3, 5],
+        [2, 5, 3, 0, 2, 3, 0, 3], [0, 2, 2, 3, 5],
+        [103, 9, 1, 7, 11, 15, 25, 201, 209, 107, 5],
+        [6, 1, 2, 7, 9, 3, 4, 5, 10, 8],
+    ]:
+        print(unsorted)
+        print(radix_sort_lsd(unsorted))
         print()
