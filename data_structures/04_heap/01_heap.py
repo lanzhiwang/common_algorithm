@@ -4,83 +4,110 @@
 class Heap:
 	def __init__(self):
 		self.h = []
-		self.currsize = 0
+		self.curr_size = 0
 
-	def leftChild(self, i):
-		if 2*i+1 < self.currsize:
-			return 2*i+1
+	def get_left_child_index(self, i):
+		left_child_index = 2 * i + 1
+		if left_child_index < self.curr_size:
+			return left_child_index
 		return None
 
-	def rightChild(self, i):
-		if 2*i+2 < self.currsize:
-			return 2*i+2
+	def get_right_child(self, i):
+		right_child_index = 2 * i + 2
+		if right_child_index < self.curr_size:
+			return right_child_index
 		return None
 
-	def maxHeapify(self, node):
-		if node < self.currsize:
-			m = node
-			lc = self.leftChild(node)
-			rc = self.rightChild(node)
-			if lc is not None and self.h[lc] > self.h[m]:
-				m = lc
-			if rc is not None and self.h[rc] > self.h[m]:
-				m = rc
-			if m != node:
-				self.h[node], self.h[m] = self.h[m], self.h[node]
-				self.maxHeapify(m)
+	def max_heapify(self, index):
+		if index < self.curr_size:
+			largest = index
+			lc = self.get_left_child_index(index)
+			rc = self.get_right_child(index)
+			if lc is not None and self.h[lc] > self.h[largest]:
+				largest = lc
+			if rc is not None and self.h[rc] > self.h[largest]:
+				largest = rc
+			if largest != index:
+				self.h[largest], self.h[index] = self.h[index], self.h[largest]
+				self.max_heapify(largest)
 
-	def buildHeap(self, a):
-		self.currsize = len(a)
-		self.h = list(a)
-		if self.currsize <= 1:
+	def build_heap(self, collection):
+		self.curr_size = len(collection)
+		self.h = list(collection)
+		if self.curr_size <= 1:
 			return
-		for i in range(self.currsize//2 - 1, -1, -1):
-			self.maxHeapify(i)
+		for i in range(self.curr_size // 2 - 1, -1, -1):
+			self.max_heapify(i)
 
-	def getMax(self):
-		if self.currsize >= 1:
+	def get_max(self):
+		if self.curr_size >= 2:
 			me = self.h[0]
 			self.h[0] = self.h.pop(-1)
-			self.currsize -= 1
-			self.maxHeapify(0)
+			self.curr_size -= 1
+			self.max_heapify(0)
 			return me
+		elif self.curr_size == 1:
+			self.curr_size -= 1
+			return self.h.pop(-1)
 		return None
 
-	def heapSort(self):
-		size = self.currsize
+	def heap_sort(self):
+		size = self.curr_size
 		for j in range(size - 1, 0, -1):
 			self.h[0], self.h[j] = self.h[j], self.h[0]
-			self.currsize -= 1
-			self.maxHeapify(0)
-		self.currsize = size
+			self.curr_size -= 1
+			self.max_heapify(0)
+		self.curr_size = size
 
 	def insert(self, data):
 		self.h.append(data)
-		curr = (self.currsize - 1) // 2
-		self.currsize += 1
+		curr = (self.curr_size - 1) // 2
+		self.curr_size += 1
 		while curr >= 0:
-			self.maxHeapify(curr)
+			self.max_heapify(curr)
 			curr = (curr - 1) // 2
 
 	def display(self):
 		print(self.h)
 
+
 def main():
-	l = [99, 5, 36, 7, 22, 17, 92, 12, 2, 19, 25, 28, 1, 46]
-	h = Heap()
-	h.buildHeap(l)
-	h.display()  # [99, 25, 92, 12, 22, 28, 46, 7, 2, 19, 5, 17, 1, 36]
+	for unsorted in [
+		[],
+		[0],
+		[2],
+		[3, 5],
+		[5, 3],
+		[5, 5],
+		[0, 0, 0, 0],
+		[1, 1, 1, 1],
+		[2, 2, 3, 5],
+		[0, 2, 2, 3, 5],
+		[2, 5, 3, 0, 2, 3, 0, 3],
+		[6, 1, 2, 7, 9, 3, 4, 5, 10, 8],
+		[103, 9, 1, 7, 11, 15, 25, 201, 209, 107, 5],
+		[-45, -2, -5]
+	]:
+		print('source unsorted list: %s' % unsorted)
 
-	print(h.getMax())
-	h.display()  # [92, 25, 46, 12, 22, 28, 36, 7, 2, 19, 5, 17, 1]
+		h = Heap()
+		h.build_heap(unsorted)
+		print('after build heap: ', end=' ')
+		h.display()
 
-	h.insert(100)
-	h.display()  # [100, 25, 92, 12, 22, 28, 46, 7, 2, 19, 5, 17, 1, 36]
+		print('max value: %s' % h.get_max())
+		print('delete max value: ', end=' ')
+		h.display()
 
-	h.heapSort()
-	h.display()  # [1, 2, 5, 7, 12, 17, 19, 22, 25, 28, 36, 46, 92, 100]
+		h.insert(100)
+		print('after insert new value 100: ', end=' ')
+		h.display()
 
-if __name__=='__main__':
+		h.heap_sort()
+		print('heap sort: ', end=' ')
+		h.display()
+		print()
+
+
+if __name__ == '__main__':
 	main()
-
-
