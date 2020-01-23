@@ -55,3 +55,41 @@ def insert_node(node, data):
     h1 = my_max(getheight(node.getright()), getheight(node.getleft())) + 1
     node.setheight(h1)
     return node
+
+r"""
+[7, 6, 5]
+insert_node(None, 7)
+
+      7-1
+     /   \
+   None  None
+
+insert_node(7, 6)
+insert_node(None, 6) -> 6-1
+
+         7-2
+        /   \
+       6-1  None
+     /   \
+   None None
+
+insert_node(7, 5)
+insert_node(6, 5)
+insert_node(None, 5) -> 5-1
+
+
+           7-2
+          /   \
+        6-2  None
+       /   \
+      5-1  None
+     /   \
+   None None
+   
+     6-2
+    /  \
+   5-1 7-1
+
+
+
+"""
