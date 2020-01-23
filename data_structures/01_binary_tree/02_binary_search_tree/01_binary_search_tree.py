@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import sys, inspect
+import sys
+import inspect
 
 '''
 二叉查找树（Binary Search Tree），也称有序二叉树（ordered binary tree）,排序二叉树（sorted binary tree），
@@ -17,8 +18,7 @@ import sys, inspect
 '''
 
 
-class Node:
-
+class Node(object):
     def __init__(self, label, parent):
         self.label = label
         self.left = None
@@ -70,7 +70,6 @@ class Node:
 
 
 class BinarySearchTree:
-
     def __init__(self):
         self.root = None
 
