@@ -233,7 +233,11 @@ def getLeftMost(root):
 
 
 def del_node(root, data):
+    print('&&&&& root: %s' % root)
+    print('&&&&& data: %s' % data)
+
     if data == root.getdata():
+        print('data == root.getdata()')
         """
         left     | right
         ---------|---------
@@ -243,15 +247,23 @@ def del_node(root, data):
         None     | None
         """
         if root.getleft() is not None and root.getright() is not None:
+            print('root.getleft() is not None and root.getright() is not None')
             temp_data = getLeftMost(root.getright())
+            print('temp_data: %s' % temp_data)
             root.setdata(temp_data)
+            print('root: %s' % root)
             root.setright(del_node(root.getright(), temp_data))
         elif root.getleft() is not None:
+            print('root.getleft() is not None')
+            print('root = root.getleft()')
             root = root.getleft()
         else:
+            print('root.getright() is not None or (None, None)')
+            print('root = root.getright()')
             root = root.getright()
 
     elif data < root.getdata():
+        print('data < root.getdata()')
         if root.getleft() is None:
             print("No such data")
             return root
@@ -259,6 +271,7 @@ def del_node(root, data):
             root.setleft(del_node(root.getleft(), data))
 
     elif data > root.getdata():
+        print('data > root.getdata()')
         if root.getright() is None:
             return root
         else:
@@ -370,3 +383,674 @@ if __name__ == "__main__":
         t.del_node(i)
         t.traversale()
 
+r"""
+% python3 05_avl_tree.py
+[4, 2, 7, 6, 3, 5, 8, 0, 9, 1]
+insert:4
+&&&&& node: None
+&&&&& data: 4
+ 4
+ 
+    4-1
+  /    \
+ None None
+*************************************
+insert:2
+&&&&& node: data: 4, left: None, right: None, height: 1
+&&&&& data: 2
+node.getleft(): None
+&&&&& node: None
+&&&&& data: 2
+node.getleft(): data: 2, left: None, right: None, height: 1
+getheight(node.getleft()): 1
+node.getright(): None
+getheight(node.getright()): 0
+  4
+ 2  *
+
+    4-2
+  /    \
+ 2-1   None
+*************************************
+insert:7
+&&&&& node: data: 4, left: 2, right: None, height: 2
+&&&&& data: 7
+node.getright(): None
+&&&&& node: None
+&&&&& data: 7
+node.getright(): data: 7, left: None, right: None, height: 1
+getheight(node.getright()): 1
+node.getleft(): data: 2, left: None, right: None, height: 1
+getheight(node.getleft()): 1
+  4
+ 2  7
+
+    4-2
+  /    \
+ 2-1   7-1
+*************************************
+insert:6
+&&&&& node: data: 4, left: 2, right: 7, height: 2
+&&&&& data: 6
+node.getright(): data: 7, left: None, right: None, height: 1
+&&&&& node: data: 7, left: None, right: None, height: 1
+&&&&& data: 6
+node.getleft(): None
+&&&&& node: None
+&&&&& data: 6
+node.getleft(): data: 6, left: None, right: None, height: 1
+getheight(node.getleft()): 1
+node.getright(): None
+getheight(node.getright()): 0
+node.getright(): data: 7, left: 6, right: None, height: 2
+getheight(node.getright()): 2
+node.getleft(): data: 2, left: None, right: None, height: 1
+getheight(node.getleft()): 1
+    4
+  2    7
+ *  *  6  *
+ 
+    4-3
+  /    \
+ 2-1   7-2
+       /
+      6-1
+
+*************************************
+insert:3
+&&&&& node: data: 4, left: 2, right: 7, height: 3
+&&&&& data: 3
+node.getleft(): data: 2, left: None, right: None, height: 1
+&&&&& node: data: 2, left: None, right: None, height: 1
+&&&&& data: 3
+node.getright(): None
+&&&&& node: None
+&&&&& data: 3
+node.getright(): data: 3, left: None, right: None, height: 1
+getheight(node.getright()): 1
+node.getleft(): None
+getheight(node.getleft()): 0
+node.getleft(): data: 2, left: None, right: 3, height: 2
+getheight(node.getleft()): 2
+node.getright(): data: 7, left: 6, right: None, height: 2
+getheight(node.getright()): 2
+    4
+  2    7
+ *  3  6  *
+
+    4-3
+  /    \
+ 2-2   7-2
+  \     /
+  3-1  6-1
+
+*************************************
+insert:5
+&&&&& node: data: 4, left: 2, right: 7, height: 3
+&&&&& data: 5
+node.getright(): data: 7, left: 6, right: None, height: 2
+&&&&& node: data: 7, left: 6, right: None, height: 2
+&&&&& data: 5
+node.getleft(): data: 6, left: None, right: None, height: 1
+&&&&& node: data: 6, left: None, right: None, height: 1
+&&&&& data: 5
+node.getleft(): None
+&&&&& node: None
+&&&&& data: 5
+node.getleft(): data: 5, left: None, right: None, height: 1
+getheight(node.getleft()): 1
+node.getright(): None
+getheight(node.getright()): 0
+node.getleft(): data: 6, left: 5, right: None, height: 2
+getheight(node.getleft()): 2
+node.getright(): None
+getheight(node.getright()): 0
+left rotation node: 7
+data: 7, left: 6, right: None, height: 2
+node.getright(): data: 6, left: 5, right: 7, height: 2
+getheight(node.getright()): 2
+node.getleft(): data: 2, left: None, right: 3, height: 2
+getheight(node.getleft()): 2
+    4
+  2    6
+ *  3  5  7
+
+    4-3
+  /    \
+ 2-2   7-2
+  \     /
+  3-1  6-2
+        /
+      5-1
+
+     6-2      6-2
+    /   \    /   \
+   5-1 7-2  5-1 7-1
+
+      4-3
+    /     \
+   2-2    6-2
+    \     /  \
+    3-1  5-1 7-1
+*************************************
+insert:8
+&&&&& node: data: 4, left: 2, right: 6, height: 3
+&&&&& data: 8
+node.getright(): data: 6, left: 5, right: 7, height: 2
+&&&&& node: data: 6, left: 5, right: 7, height: 2
+&&&&& data: 8
+node.getright(): data: 7, left: None, right: None, height: 1
+&&&&& node: data: 7, left: None, right: None, height: 1
+&&&&& data: 8
+node.getright(): None
+&&&&& node: None
+&&&&& data: 8
+node.getright(): data: 8, left: None, right: None, height: 1
+getheight(node.getright()): 1
+node.getleft(): None
+getheight(node.getleft()): 0
+node.getright(): data: 7, left: None, right: 8, height: 2
+getheight(node.getright()): 2
+node.getleft(): data: 5, left: None, right: None, height: 1
+getheight(node.getleft()): 1
+node.getright(): data: 6, left: 5, right: 7, height: 3
+getheight(node.getright()): 3
+node.getleft(): data: 2, left: None, right: 3, height: 2
+getheight(node.getleft()): 2
+        4
+    2        6
+  *    3    5    7
+ *  *  *  *  *  *  *  8
+
+      4-4
+    /     \
+   2-2    6-3
+    \     /  \
+    3-1  5-1 7-2
+              \
+              8-1
+
+*************************************
+insert:0
+&&&&& node: data: 4, left: 2, right: 6, height: 4
+&&&&& data: 0
+node.getleft(): data: 2, left: None, right: 3, height: 2
+&&&&& node: data: 2, left: None, right: 3, height: 2
+&&&&& data: 0
+node.getleft(): None
+&&&&& node: None
+&&&&& data: 0
+node.getleft(): data: 0, left: None, right: None, height: 1
+getheight(node.getleft()): 1
+node.getright(): data: 3, left: None, right: None, height: 1
+getheight(node.getright()): 1
+node.getleft(): data: 2, left: 0, right: 3, height: 2
+getheight(node.getleft()): 2
+node.getright(): data: 6, left: 5, right: 7, height: 3
+getheight(node.getright()): 3
+        4
+    2        6
+  0    3    5    7
+ *  *  *  *  *  *  *  8
+
+        4-4
+      /      \
+     2-2     6-3
+    /   \    /  \
+  0-1  3-1  5-1 7-2
+                 \
+                8-1
+
+*************************************
+insert:9
+&&&&& node: data: 4, left: 2, right: 6, height: 4
+&&&&& data: 9
+node.getright(): data: 6, left: 5, right: 7, height: 3
+&&&&& node: data: 6, left: 5, right: 7, height: 3
+&&&&& data: 9
+node.getright(): data: 7, left: None, right: 8, height: 2
+&&&&& node: data: 7, left: None, right: 8, height: 2
+&&&&& data: 9
+node.getright(): data: 8, left: None, right: None, height: 1
+&&&&& node: data: 8, left: None, right: None, height: 1
+&&&&& data: 9
+node.getright(): None
+&&&&& node: None
+&&&&& data: 9
+node.getright(): data: 9, left: None, right: None, height: 1
+getheight(node.getright()): 1
+node.getleft(): None
+getheight(node.getleft()): 0
+node.getright(): data: 8, left: None, right: 9, height: 2
+getheight(node.getright()): 2
+node.getleft(): None
+getheight(node.getleft()): 0
+right rotation node: 7
+node.getright(): data: 8, left: 7, right: 9, height: 2
+getheight(node.getright()): 2
+node.getleft(): data: 5, left: None, right: None, height: 1
+getheight(node.getleft()): 1
+node.getright(): data: 6, left: 5, right: 8, height: 3
+getheight(node.getright()): 3
+node.getleft(): data: 2, left: 0, right: 3, height: 2
+getheight(node.getleft()): 2
+        4
+    2        6
+  0    3    5    8
+ *  *  *  *  *  *  7  9
+
+        4-4
+      /      \
+     2-2     6-3
+    /   \    /  \
+  0-1  3-1  5-1 7-2
+                 \
+                 8-2
+                  \
+                  9-1
+
+      8-2       8-2
+     /  \      /  \
+   7-2  9-1  7-1  9-1
+   
+           4-4
+        /       \
+      2-2      6-3
+     /  \    /    \
+   0-1 3-1  5-1   8-2
+                  / \
+                7-1 9-1
+
+*************************************
+insert:1
+&&&&& node: data: 4, left: 2, right: 6, height: 4
+&&&&& data: 1
+node.getleft(): data: 2, left: 0, right: 3, height: 2
+&&&&& node: data: 2, left: 0, right: 3, height: 2
+&&&&& data: 1
+node.getleft(): data: 0, left: None, right: None, height: 1
+&&&&& node: data: 0, left: None, right: None, height: 1
+&&&&& data: 1
+node.getright(): None
+&&&&& node: None
+&&&&& data: 1
+node.getright(): data: 1, left: None, right: None, height: 1
+getheight(node.getright()): 1
+node.getleft(): None
+getheight(node.getleft()): 0
+node.getleft(): data: 0, left: None, right: 1, height: 2
+getheight(node.getleft()): 2
+node.getright(): data: 3, left: None, right: None, height: 1
+getheight(node.getright()): 1
+node.getleft(): data: 2, left: 0, right: 3, height: 3
+getheight(node.getleft()): 3
+node.getright(): data: 6, left: 5, right: 8, height: 3
+getheight(node.getright()): 3
+        4
+    2        6
+  0    3    5    8
+ *  1  *  *  *  *  7  9
+
+           4-4
+        /       \
+      2-3      6-3
+     /  \    /    \
+   0-2 3-1  5-1   8-2
+    \             / \
+    1-1         7-1 9-1
+
+*************************************
+
+
+
+
+
+
+
+
+
+
+
+           4-4
+        /       \
+      2-3      6-3
+     /  \    /    \
+   0-2 3-1  5-1   8-2
+    \             / \
+    1-1         7-1 9-1
+
+delete:4
+&&&&& root: data: 4, left: 2, right: 6, height: 4
+&&&&& data: 4
+data == root.getdata()
+root.getleft() is not None and root.getright() is not None
+temp_data: 5
+root: data: 5, left: 2, right: 6, height: 4
+
+           5-4
+        /       \
+      2-3      6-3
+     /  \    /    \
+   0-2 3-1  5-1   8-2
+    \             / \
+    1-1         7-1 9-1
+
+&&&&& root: data: 6, left: 5, right: 8, height: 3
+&&&&& data: 5
+data < root.getdata()
+&&&&& root: data: 5, left: None, right: None, height: 1
+&&&&& data: 5
+data == root.getdata()
+root.getright() is not None or (None, None)
+root = root.getright()
+
+           5-4
+        /       \
+      2-3      6-3
+     /  \         \
+   0-2 3-1        8-2
+    \             / \
+    1-1         7-1 9-1
+
+    7-3         6-3           7-3
+     \           \           /   \
+     8-2         7-3        6-1 8-2
+       \          \              \
+       9-1        8-2            9-1
+                    \
+                    9-1
+                    
+left rotation node: 8
+data: 8, left: 7, right: 9, height: 2
+right rotation node: 6
+
+             5-4
+           /     \
+         2-3     7-3
+        /  \     /  \
+      0-2 3-1   6-1 8-2
+       \             \
+       1-1           9-1  
+
+
+        5
+    2        7
+  0    3    6    8
+ *  1  *  *  *  *  *  9
+*************************************
+
+             5-4
+           /     \
+         2-3     7-3
+        /  \     /  \
+      0-2 3-1   6-1 8-2
+       \             \
+       1-1           9-1  
+
+
+delete:2
+&&&&& root: data: 5, left: 2, right: 7, height: 4
+&&&&& data: 2
+data < root.getdata()
+&&&&& root: data: 2, left: 0, right: 3, height: 3
+&&&&& data: 2
+data == root.getdata()
+root.getleft() is not None and root.getright() is not None
+temp_data: 3
+root: data: 3, left: 0, right: 3, height: 3
+
+             5-4
+           /     \
+         3-3     7-3
+        /  \     /  \
+      0-2 3-1   6-1 8-2
+       \             \
+       1-1           9-1  
+
+
+&&&&& root: data: 3, left: None, right: None, height: 1
+&&&&& data: 3
+data == root.getdata()
+root.getright() is not None or (None, None)
+root = root.getright()
+
+             5-4
+           /     \
+         3-3     7-3
+        /        /  \
+      0-2      6-1 8-2
+       \             \
+       1-1           9-1  
+
+   1-2       3-3    1-2
+   /         /      /  \
+  0-1      1-2     0-1 3-1
+            /
+          0-1
+  
+         5-4
+     /        \
+    1-2      7-3
+   /   \    /  \
+  0-1 3-1  6-1 8-2
+                \
+                9-1
+  
+right rotation node: 0
+left rotation node: 3
+data: 3, left: 1, right: None, height: 3
+        5
+    1        7
+  0    3    6    8
+ *  *  *  *  *  *  *  9
+*************************************
+
+         5-4
+     /        \
+    1-2      7-3
+   /   \    /  \
+  0-1 3-1  6-1 8-2
+                \
+                9-1
+
+delete:7
+&&&&& root: data: 5, left: 1, right: 7, height: 4
+&&&&& data: 7
+data > root.getdata()
+&&&&& root: data: 7, left: 6, right: 8, height: 3
+&&&&& data: 7
+data == root.getdata()
+root.getleft() is not None and root.getright() is not None
+temp_data: 8
+root: data: 8, left: 6, right: 8, height: 3
+
+         5-4
+     /        \
+    1-2      8-3
+   /   \    /  \
+  0-1 3-1  6-1 8-2
+                \
+                9-1
+
+&&&&& root: data: 8, left: None, right: 9, height: 2
+&&&&& data: 8
+data == root.getdata()
+root.getright() is not None or (None, None)
+root = root.getright()
+
+         5-3
+     /        \
+    1-2      8-2
+   /   \    /  \
+  0-1 3-1  6-1 9-1
+
+
+    5
+  1    8
+ 0  3  6  9
+*************************************
+
+         5-3
+     /        \
+    1-2      8-2
+   /   \    /  \
+  0-1 3-1  6-1 9-1
+
+delete:6
+&&&&& root: data: 5, left: 1, right: 8, height: 3
+&&&&& data: 6
+data > root.getdata()
+&&&&& root: data: 8, left: 6, right: 9, height: 2
+&&&&& data: 6
+data < root.getdata()
+&&&&& root: data: 6, left: None, right: None, height: 1
+&&&&& data: 6
+data == root.getdata()
+root.getright() is not None or (None, None)
+root = root.getright()
+    5
+  1    8
+ 0  3  *  9
+*************************************
+
+         5-3
+     /        \
+    1-2      8-2
+   /   \       \
+  0-1 3-1      9-1
+
+delete:3
+&&&&& root: data: 5, left: 1, right: 8, height: 3
+&&&&& data: 3
+data < root.getdata()
+&&&&& root: data: 1, left: 0, right: 3, height: 2
+&&&&& data: 3
+data > root.getdata()
+&&&&& root: data: 3, left: None, right: None, height: 1
+&&&&& data: 3
+data == root.getdata()
+root.getright() is not None or (None, None)
+root = root.getright()
+    5
+  1    8
+ 0  *  *  9
+*************************************
+
+         5-3
+     /        \
+    1-2      8-2
+   /           \
+  0-1         9-1
+
+
+delete:5
+&&&&& root: data: 5, left: 1, right: 8, height: 3
+&&&&& data: 5
+data == root.getdata()
+root.getleft() is not None and root.getright() is not None
+temp_data: 8
+root: data: 8, left: 1, right: 8, height: 3
+
+         8-3
+     /        \
+    1-2      8-2
+   /           \
+  0-1         9-1
+
+
+&&&&& root: data: 8, left: None, right: 9, height: 2
+&&&&& data: 8
+data == root.getdata()
+root.getright() is not None or (None, None)
+root = root.getright()
+
+         8-3
+     /        \
+    1-2      9-1
+   /           
+  0-1         
+
+
+    8
+  1    9
+ 0  *  *  *
+*************************************
+
+         8-3
+     /        \
+    1-2      9-1
+   /           
+  0-1         
+
+
+delete:8
+&&&&& root: data: 8, left: 1, right: 9, height: 3
+&&&&& data: 8
+data == root.getdata()
+root.getleft() is not None and root.getright() is not None
+temp_data: 9
+root: data: 9, left: 1, right: 9, height: 3
+
+         9-3
+     /        \
+    1-2      9-1
+   /           
+  0-1         
+
+
+&&&&& root: data: 9, left: None, right: None, height: 1
+&&&&& data: 9
+data == root.getdata()
+root.getright() is not None or (None, None)
+root = root.getright()
+
+    9-3
+     /        
+    1-2      
+   /           
+  0-1         
+
+left rotation node: 9
+data: 9, left: 1, right: None, height: 3
+  1
+ 0  9
+*************************************
+
+     1-2
+    /  \
+   0-1 9-1
+
+delete:0
+&&&&& root: data: 1, left: 0, right: 9, height: 2
+&&&&& data: 0
+data < root.getdata()
+&&&&& root: data: 0, left: None, right: None, height: 1
+&&&&& data: 0
+data == root.getdata()
+root.getright() is not None or (None, None)
+root = root.getright()
+  1
+ *  9
+*************************************
+delete:9
+&&&&& root: data: 1, left: None, right: 9, height: 2
+&&&&& data: 9
+data > root.getdata()
+&&&&& root: data: 9, left: None, right: None, height: 1
+&&&&& data: 9
+data == root.getdata()
+root.getright() is not None or (None, None)
+root = root.getright()
+ 1
+*************************************
+delete:1
+&&&&& root: data: 1, left: None, right: None, height: 1
+&&&&& data: 1
+data == root.getdata()
+root.getright() is not None or (None, None)
+root = root.getright()
+
+
+
+
+"""
