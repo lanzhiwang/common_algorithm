@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from queue import Queue
+
 
 class Node(object):
     def __init__(self, data):
@@ -198,6 +200,22 @@ class AVLTree(object):
             return None
         self.root = del_node(self.root, data)
 
+    def traver_sale(self):
+        result = []
+        if self.root is not None:
+            queue = Queue()
+            queue.put(self.root)
+            while not queue.empty():
+                node = queue.get()
+                result.append(node.get_data())
+
+                if node.get_left() is not None:
+                    queue.put(node.get_left())
+
+                if node.get_right() is not None:
+                    queue.put(node.get_right())
+            return result
+
 
 if __name__ == '__main__':
     t = AVLTree()
@@ -206,6 +224,7 @@ if __name__ == '__main__':
     print(ll)
     for i in ll:
         t.insert(i)
+        print(t.traver_sale())
 
     print()
     print()
@@ -213,3 +232,4 @@ if __name__ == '__main__':
 
     for i in ll:
         t.del_node(i)
+        print(t.traver_sale())
