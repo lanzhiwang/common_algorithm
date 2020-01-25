@@ -258,8 +258,8 @@ class RedBlackTree:
     ###################################################################################
 
     def insert(self, label):
-        print('self: %s' % self)
-        print('label: %s' % label)
+        print('&&&&&&& self: %s' % self)
+        print('&&&&&&& label: %s' % label)
         """Inserts label into the subtree rooted at self, performs any
         rotations necessary to maintain balance, and then returns the
         new root to this subtree (likely self).
@@ -269,20 +269,29 @@ class RedBlackTree:
             # Only possible with an empty tree
             self.label = label
             return self
-        if self.label == label:
+
+        if label == self.label:
+            print('label == self.label')
             return self
-        elif self.label > label:
+        elif label < self.label:
+            print('label < self.label')
+            print('self.left: %s' % self.left)
             if self.left:
                 self.left.insert(label)
             else:
                 self.left = RedBlackTree(label, 1, self)
+                print('self.left: %s' % self.left)
                 self.left._insert_repair()
-        else:
+        else:  # label > self.label
+            print('label > self.label')
+            print('self.right: %s' % self.right)
             if self.right:
                 self.right.insert(label)
             else:
                 self.right = RedBlackTree(label, 1, self)
+                print('self.right: %s' % self.right)
                 self.right._insert_repair()
+
         return self.parent or self
 
     def _insert_repair(self):
@@ -293,7 +302,7 @@ class RedBlackTree:
         elif color(self.parent) == 0:
             # If the parent is black, then it just needs to be red
             self.color = 1
-        else:
+        else:  # 有父节点，父节点是红色
             uncle = self.parent.sibling
             if color(uncle) == 0:
                 if self.is_left() and self.parent.is_right():
@@ -552,11 +561,184 @@ def color(node):
 
 
 def test_insert():
-    r"""Test the insert() method of the tree correctly balances, colors,
-    and inserts.
-
+    r"""
     [0, 8, -8, 4, 12, 10, 11]
 
+    0-0
+
+    ********* insert 8 *********
+    &&&&&&& self: '0 blk'
+    &&&&&&& label: 8
+    label > self.label
+    self.right: None
+    self.right: '8 red'
+
+    0-0
+     \
+      8-1
+
+    ********* insert -8 *********
+    &&&&&&& self: {'0 blk': (None, '8 red')}
+    &&&&&&& label: -8
+    label < self.label
+    self.left: None
+    self.left: '-8 red'
+
+       0-0
+      /   \
+    -8-1 8-1
+
+    ********* insert 4 *********
+    &&&&&&& self: {'0 blk': ('-8 red', '8 red')}
+    &&&&&&& label: 4
+    label > self.label
+    self.right: '8 red'
+    &&&&&&& self: '8 red'
+    &&&&&&& label: 4
+    label < self.label
+    self.left: None
+    self.left: '4 red'
+
+       0-0
+      /   \
+    -8-1 8-1
+          /
+         4-1
+
+       0-1
+      /   \
+    -8-0 8-0
+          /
+         4-1
+
+       0-0
+      /   \
+    -8-0 8-0
+          /
+         4-1
+
+    ********* insert 12 *********
+    &&&&&&& self: {'0 blk': ('-8 blk', {'8 blk': ('4 red', None)})}
+    &&&&&&& label: 12
+    label > self.label
+    self.right: {'8 blk': ('4 red', None)}
+    &&&&&&& self: {'8 blk': ('4 red', None)}
+    &&&&&&& label: 12
+    label > self.label
+    self.right: None
+    self.right: '12 red'
+
+         0-0
+      /      \
+    -8-0    8-0
+           /  \
+         4-1 12-1
+
+
+    ********* insert 10 *********
+    &&&&&&& self: {'0 blk': ('-8 blk', {'8 blk': ('4 red', '12 red')})}
+    &&&&&&& label: 10
+    label > self.label
+    self.right: {'8 blk': ('4 red', '12 red')}
+    &&&&&&& self: {'8 blk': ('4 red', '12 red')}
+    &&&&&&& label: 10
+    label > self.label
+    self.right: '12 red'
+    &&&&&&& self: '12 red'
+    &&&&&&& label: 10
+    label < self.label
+    self.left: None
+    self.left: '10 red'
+
+         0-0
+      /      \
+    -8-0    8-0
+           /  \
+         4-1 12-1
+              /
+             10-1
+
+         0-0
+      /      \
+    -8-0    8-1
+           /  \
+         4-0 12-0
+              /
+             10-1
+
+    ********* insert 11 *********
+    &&&&&&& self: {'0 blk': ('-8 blk', {'8 red': ('4 blk', {'12 blk': ('10 red', None)})})}
+    &&&&&&& label: 11
+    label > self.label
+    self.right: {'8 red': ('4 blk', {'12 blk': ('10 red', None)})}
+    &&&&&&& self: {'8 red': ('4 blk', {'12 blk': ('10 red', None)})}
+    &&&&&&& label: 11
+    label > self.label
+    self.right: {'12 blk': ('10 red', None)}
+    &&&&&&& self: {'12 blk': ('10 red', None)}
+    &&&&&&& label: 11
+    label < self.label
+    self.left: '10 red'
+    &&&&&&& self: '10 red'
+    &&&&&&& label: 11
+    label > self.label
+    self.right: None
+    self.right: '11 red'
+
+         0-0
+      /      \
+    -8-0    8-1
+           /  \
+         4-0 12-0
+              /
+             10-1
+              \
+             11-1
+
+    _insert_repair(11)
+     11-1
+     /
+    10-1
+
+         0-0
+      /      \
+    -8-0    8-1
+           /  \
+         4-0 12-0
+              /
+             11-1
+              /
+             10-1
+
+    _insert_repair(10)
+
+       11-1
+      /   \
+    10-1 12-0
+
+         0-0
+      /      \
+    -8-0    8-1
+           /    \
+         4-0   11-1
+               /   \
+             10-1 12-0
+
+         0-0
+      /      \
+    -8-0    8-1
+           /    \
+         4-0   11-0
+               /   \
+             10-1 12-1
+
+    """
+    tree = RedBlackTree(0)
+    for i in [8, -8, 4, 12, 10, 11]:
+        print('********* insert %s *********' % i)
+        tree.insert(i)
+
+    r"""    
               0-0
             /    \
          -8-0    8-1
@@ -565,16 +747,7 @@ def test_insert():
                     / \
                  10-1 12-1
 
-
     """
-    tree = RedBlackTree(0)
-    tree.insert(8)
-    tree.insert(-8)
-    tree.insert(4)
-    tree.insert(12)
-    tree.insert(10)
-    tree.insert(11)
-
     ans = RedBlackTree(0, 0)
     ans.left = RedBlackTree(-8, 0, ans)
     ans.right = RedBlackTree(8, 1, ans)
