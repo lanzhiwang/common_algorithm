@@ -103,7 +103,7 @@ class MaxArray:
         self._update_tree(self.root, i, val)
 
     def max_range(self, i, j):
-        return self._sum_range(self.root, i, j)
+        return self._max_range(self.root, i, j)
 
     def _build_tree(self, start, end):
         if start == end:
@@ -123,7 +123,7 @@ class MaxArray:
             self._update_tree(root.right, i, val)
         root.val = max([root.left.val, root.right.val])
 
-    def _sum_range(self, root, i, j):
+    def _max_range(self, root, i, j):
         if root.start == i and root.end == j:
             return root.val
         """
@@ -131,11 +131,11 @@ class MaxArray:
         [start mid] [mid+1 end]
         """
         if j <= root.mid:
-            return self._sum_range(root.left, i, j)
+            return self._max_range(root.left, i, j)
         elif i > root.mid:
-            return self._sum_range(root.right, i, j)
+            return self._max_range(root.right, i, j)
         else:
-            return max([self._sum_range(root.left, i, root.mid), self._sum_range(root.right, root.mid + 1, j)])
+            return max([self._max_range(root.left, i, root.mid), self._max_range(root.right, root.mid + 1, j)])
 
     def traverse(self):
         result = []
