@@ -255,8 +255,6 @@ class RedBlackTree:
             else:
                 return self.left.search(label)
 
-    ###################################################################################
-
     def insert(self, label):
         print('&&&&&&& self: %s' % self)
         print('&&&&&&& label: %s' % label)
@@ -324,6 +322,8 @@ class RedBlackTree:
                 uncle.color = 0
                 self.grandparent.color = 1
                 self.grandparent._insert_repair()
+
+    ###################################################################################
 
     def remove(self, label):
         """Remove label from this tree."""
