@@ -326,19 +326,25 @@ class RedBlackTree:
     ###################################################################################
 
     def remove(self, label):
+        print('&&&&&&& self: %s' % self)
+        print('&&&&&&& label: %s' % label)
         """Remove label from this tree."""
-        if self.label == label:
+        if label == self.label:
+            print('label == self.label')
             if self.left and self.right:
+                print('self.left is not None and self.right is not None')
                 # It's easier to balance a node with at most one child,
                 # so we replace this node with the greatest one less than
                 # it and remove that.
                 value = self.left.get_max()
+                print('value: %s' % value)
                 self.label = value
                 self.left.remove(value)
             else:
                 # This node has at most one non-None child, so we don't
                 # need to replace
-                child = self.left or self.right
+                print('not self.left is not None and self.right is not None')
+                print('self.color: %s' % self.color)
                 if self.color == 1:
                     # This node is red, and its child is black
                     # The only way this happens to a node with one child
@@ -349,8 +355,11 @@ class RedBlackTree:
                     else:
                         self.parent.right = None
                 else:
+                    child = self.left or self.right
+                    print('child: %s' % child)
                     # The node is black
                     if child is None:
+                        print('没有左子树，也没有右子树')
                         # This node and its child are black
                         if self.parent is None:
                             # The tree is now empty
@@ -363,8 +372,33 @@ class RedBlackTree:
                                 self.parent.right = None
                             self.parent = None
                     else:
+                        print('有左子树，或者有右子树')
                         # This node is black and its child is red
                         # Move the child node here and make it black
+                        r"""
+                        有左子树
+                          A -> self             B -> self
+                         /             =>     /   \
+                        B   -> child        None None
+                        
+                            A -> self          B -> self
+                           /                  / \
+                          B   -> child  =>   C   D
+                         / \
+                        C   D
+                        
+                        有右子树       
+                        A   -> self            B -> self
+                         \             =>    /   \
+                          B -> child       None None
+                        
+                        A   -> self            B -> self
+                         \                    / \
+                          B -> child    =>   C   D
+                         / \
+                        C   D
+                                
+                        """
                         self.label = child.label
                         self.left = child.left
                         self.right = child.right
@@ -372,16 +406,44 @@ class RedBlackTree:
                             self.left.parent = self
                         if self.right:
                             self.right.parent = self
-        elif self.label > label:
+        elif label < self.label:
+            print('label < self.label')
             if self.left:
                 self.left.remove(label)
-        else:
+        else:  # label > self.label
+            print('label > self.label')
             if self.right:
                 self.right.remove(label)
         return self.parent or self
 
     def _remove_repair(self):
-        """Repair the coloring of the tree that may have been messed up."""
+        r"""Repair the coloring of the tree that may have been messed up.
+              A
+             /
+           B-0  ->self
+          /  \
+        None None
+
+           A
+            \
+           B-0  ->self
+          /  \
+        None None
+        """
+
+        r"""self 兄弟节点为并且为红
+              A           A-1        S-0
+             / \          / \         /
+           B-0 S-1  =>  B-0 S-0      A-1
+          /  \                       /
+        None None                   B-0
+
+           A               A-1       S-0
+          / \             /  \         \
+        S-1 B-0     =>   S-0 B-0       A-1
+            /  \                         \
+          None None                      B-0
+        """
         if color(self.sibling) == 1:
             self.sibling.color = 0
             self.parent.color = 1
@@ -389,6 +451,21 @@ class RedBlackTree:
                 self.parent.rotate_left()
             else:
                 self.parent.rotate_right()
+
+        r"""父节点肯定有
+        
+              A-0
+             /
+           B-0  ->self
+          /  \
+        None None
+
+           A-0
+            \
+           B-0  ->self
+          /  \
+        None None
+        """
         if (
             color(self.parent) == 0
             and color(self.sibling) == 0
@@ -407,6 +484,9 @@ class RedBlackTree:
             self.sibling.color = 1
             self.parent.color = 0
             return
+
+
+
         if (
             self.is_left()
             and color(self.sibling) == 0
@@ -416,6 +496,9 @@ class RedBlackTree:
             self.sibling.rotate_right()
             self.sibling.color = 0
             self.sibling.right.color = 1
+
+
+
         if (
             self.is_right()
             and color(self.sibling) == 0
@@ -425,6 +508,8 @@ class RedBlackTree:
             self.sibling.rotate_left()
             self.sibling.color = 0
             self.sibling.left.color = 1
+
+
         if (
             self.is_left()
             and color(self.sibling) == 0
@@ -434,6 +519,8 @@ class RedBlackTree:
             self.grandparent.color = self.parent.color
             self.parent.color = 0
             self.parent.sibling.color = 0
+
+
         if (
             self.is_right()
             and color(self.sibling) == 0
@@ -833,6 +920,22 @@ def test_insert_delete():
       \         /   \
     -8-1       9-1 11-1
 
+                                   8-0
+                    /                                 \
+                  0-1                                12-1
+            /             \                     /             \
+        -12-0            4-0                  10-0            15-0
+      /      \         /      \          /           \       /    \
+    NULL-0   -8-1    NULL-0 NULL-0     9-1           11-1  NULL-0 NULL-0
+            /   \                    /    \         /    \
+        NULL-0 NULL-0              NULL-0 NULL-0  NULL-0 NULL-0
+
+    1）每个结点要么是红的，要么是黑的。
+    2）根结点是黑的。
+    3）每个叶结点（叶结点即指树尾端NIL指针或NULL结点）是黑的。
+    4）如果一个结点是红的，那么它的俩个儿子都是黑的。
+    5）对于任一结点而言，其到叶结点树尾端NIL指针的每一条路径都包含相同数目的黑结点。
+
     """
     tree = RedBlackTree(0)
 
@@ -852,11 +955,55 @@ def test_insert_delete():
 
     
     [15, -12, 9]
+    
+    ********* delete 15 *********
+    &&&&&&& self: {'8 blk': ({'0 red': ({'-12 blk': (None, '-8 red')}, '4 blk')},
+               {'12 red': ({'10 blk': ('9 red', '11 red')}, '15 blk')})}
+    &&&&&&& label: 15
+    &&&&&&& self: {'12 red': ({'10 blk': ('9 red', '11 red')}, '15 blk')}
+    &&&&&&& label: 15
+    &&&&&&& self: '15 blk'
+    &&&&&&& label: 15
+    child: None
+    {'8 blk': ({'0 red': ({'-12 blk': (None, '-8 red')}, '4 blk')},
+               {'10 red': ('9 blk', {'12 blk': ('11 red', None)})})}
+    ********* delete -12 *********
+    &&&&&&& self: {'8 blk': ({'0 red': ({'-12 blk': (None, '-8 red')}, '4 blk')},
+               {'10 red': ('9 blk', {'12 blk': ('11 red', None)})})}
+    &&&&&&& label: -12
+    &&&&&&& self: {'0 red': ({'-12 blk': (None, '-8 red')}, '4 blk')}
+    &&&&&&& label: -12
+    &&&&&&& self: {'-12 blk': (None, '-8 red')}
+    &&&&&&& label: -12
+    child: '-8 red'
+    {'8 blk': ({'0 red': ('-8 blk', '4 blk')},
+               {'10 red': ('9 blk', {'12 blk': ('11 red', None)})})}
+    ********* delete 9 *********
+    &&&&&&& self: {'8 blk': ({'0 red': ('-8 blk', '4 blk')},
+               {'10 red': ('9 blk', {'12 blk': ('11 red', None)})})}
+    &&&&&&& label: 9
+    &&&&&&& self: {'10 red': ('9 blk', {'12 blk': ('11 red', None)})}
+    &&&&&&& label: 9
+    &&&&&&& self: '9 blk'
+    &&&&&&& label: 9
+    child: None
+    {'8 blk': ({'0 red': ('-8 blk', '4 blk')}, {'11 red': ('10 blk', '12 blk')})}
 
     """
-    tree = tree.remove(15)
-    tree = tree.remove(-12)
-    tree = tree.remove(9)
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    for i in [15, -12, 9]:
+        print('********* delete %s *********' % i)
+        tree = tree.remove(i)
+        print(tree)
+
+
 
     if not tree.check_color_properties():
         return False
