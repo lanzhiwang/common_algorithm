@@ -1,20 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-class RedBlackTree:
-    """
-    A Red-Black tree, which is a self-balancing BST (binary search
-    tree).
-    This tree has similar performance to AVL trees, but the balancing is
-    less strict, so it will perform faster for writing/deleting nodes
-    and slower for reading in the average case, though, because they're
-    both balanced binary search trees, both will get the same asymptotic
-    perfomance.
-    To read more about them, https://en.wikipedia.org/wiki/Red–black_tree
-    Unless otherwise specified, all asymptotic runtimes are specified in
-    terms of the size of the tree.
-    """
 
+class RedBlackTree:
     def __init__(self, label=None, color=0, parent=None, left=None, right=None):
         """Initialize a new Red-Black Tree node with the given values:
             label: The value associated with this node
@@ -36,12 +24,16 @@ class RedBlackTree:
         returns the new root to this subtree.
         Perfoming one rotation can be done in O(1).
 
-
-                    0
+        情景一：
+                    0 -> self
                 /      \
               -10      10
               / \     / \
             -20 -5   5  20
+
+                 0
+               /  \
+              -10  5
 
                     10
                    /  \
@@ -50,6 +42,28 @@ class RedBlackTree:
               -10  5
               / \
             -20 -5
+
+        情景二：
+
+                    0
+                /      \
+              -10      10 -> self
+              / \     / \
+            -20 -5   5  20
+
+            20
+           /
+          10
+         /
+        5
+
+               0
+            /    \
+          -10    20
+          / \    /
+        -20 -5  10
+                /
+                5
 
         """
         parent = self.parent
@@ -115,78 +129,141 @@ class RedBlackTree:
         left.parent = parent
         return left
 
+    def get_max(self):
+        """Returns the largest element in this tree.
+        This method is guaranteed to run in O(log(n)) time.
+        """
+        if self.right:
+            # Go as far right as possible
+            return self.right.get_max()
+        else:
+            return self.label
+
+    def get_min(self):
+        """Returns the smallest element in this tree.
+        This method is guaranteed to run in O(log(n)) time.
+        """
+        if self.left:
+            # Go as far left as possible
+            return self.left.get_min()
+        else:
+            return self.label
+
+    @property
+    def grandparent(self):
+        """Get the current node's grandparent, or None if it doesn't exist."""
+        if self.parent is None:
+            return None
+        else:
+            return self.parent.parent
+
+    @property
+    def sibling(self):
+        """Get the current node's sibling, or None if it doesn't exist."""
+        if self.parent is None:
+            return None
+        elif self.parent.left is self:
+            return self.parent.right
+        else:
+            return self.parent.left
+
+    def is_left(self):
+        """Returns true iff this node is the left child of its parent."""
+        return self.parent and self.parent.left is self
+
+    def is_right(self):
+        """Returns true iff this node is the right child of its parent."""
+        return self.parent and self.parent.right is self
+
+    def __bool__(self):
+        return True
+
+    def __len__(self):
+        """
+        Return the number of nodes in this tree.
+        """
+        ln = 1
+        if self.left:
+            ln += len(self.left)
+        if self.right:
+            ln += len(self.right)
+        return ln
+
+    def __eq__(self, other):
+        """Test if two trees are equal."""
+        if self.label == other.label:
+            return self.left == other.left and self.right == other.right
+        else:
+            return False
+
+    def __repr__(self):
+        from pprint import pformat
+
+        if self.left is None and self.right is None:
+            return "'%s %s'" % (self.label, (self.color and "red") or "blk")
+        return pformat(
+            {
+                "%s %s"
+                % (self.label, (self.color and "red") or "blk"): (self.left, self.right)
+            },
+            indent=1,
+        )
+
+    def preorder_traverse(self):
+        yield self.label
+        if self.left:
+            yield from self.left.preorder_traverse()
+        if self.right:
+            yield from self.right.preorder_traverse()
+
+    def inorder_traverse(self):
+        if self.left:
+            yield from self.left.inorder_traverse()
+        yield self.label
+        if self.right:
+            yield from self.right.inorder_traverse()
+
+    def postorder_traverse(self):
+        if self.left:
+            yield from self.left.postorder_traverse()
+        if self.right:
+            yield from self.right.postorder_traverse()
+        yield self.label
+
+    def __contains__(self, label):
+        """Search through the tree for label, returning True iff it is
+        found somewhere in the tree.
+        Guaranteed to run in O(log(n)) time.
+        """
+        return self.search(label) is not None
+
+    def search(self, label):
+        """Search through the tree for label, returning its node if
+        it's found, and None otherwise.
+        This method is guaranteed to run in O(log(n)) time.
+        """
+        if self.label == label:
+            return self
+        elif label > self.label:
+            if self.right is None:
+                return None
+            else:
+                return self.right.search(label)
+        else:
+            if self.left is None:
+                return None
+            else:
+                return self.left.search(label)
+
+    ###################################################################################
+
     def insert(self, label):
-        r"""Inserts label into the subtree rooted at self, performs any
+        print('self: %s' % self)
+        print('label: %s' % label)
+        """Inserts label into the subtree rooted at self, performs any
         rotations necessary to maintain balance, and then returns the
         new root to this subtree (likely self).
         This is guaranteed to run in O(log(n)) time.
-
-            [0, 8, -8, 4, 12, 10, 11]
-
-              0-0
-            /    \
-         -8-0    8-1
-                /   \
-              4-0  11-0
-                  /    \
-                10-1  12-1
-
-          0-0
-            \
-            8-1
-
-            0-0
-           /   \
-        -8-1   8-1
-
-            0-0
-           /   \
-        -8-0   8-0
-               /
-             4-1
-
-            0-0
-           /   \
-        -8-0   8-0
-               / \
-             4-1 12-1
-
-            0-0
-           /   \
-        -8-0   8-1
-               / \
-             4-0 12-0
-                  /
-                10-1
-
-            0-0
-           /   \
-        -8-0   8-1
-               / \
-             4-0 12-0
-                  /
-                10-1
-                  \
-                 11-1
-
-            0-0
-           /   \
-        -8-0   8-1
-               / \
-             4-0 12-0
-                  /
-                11-1
-                 /
-               10-1
-
-            0-0
-           /   \
-        -8-0   8-1
-               /   \
-             4-0  11-0
-                   / \
-                10-1 12-1
-
         """
         if self.label is None:
             # Only possible with an empty tree
@@ -430,31 +507,6 @@ class RedBlackTree:
 
     # Here are functions which are general to all binary search trees
 
-    def __contains__(self, label):
-        """Search through the tree for label, returning True iff it is
-        found somewhere in the tree.
-        Guaranteed to run in O(log(n)) time.
-        """
-        return self.search(label) is not None
-
-    def search(self, label):
-        """Search through the tree for label, returning its node if
-        it's found, and None otherwise.
-        This method is guaranteed to run in O(log(n)) time.
-        """
-        if self.label == label:
-            return self
-        elif label > self.label:
-            if self.right is None:
-                return None
-            else:
-                return self.right.search(label)
-        else:
-            if self.left is None:
-                return None
-            else:
-                return self.left.search(label)
-
     def floor(self, label):
         """Returns the largest element in this tree which is at most label.
         This method is guaranteed to run in O(log(n)) time."""
@@ -490,118 +542,13 @@ class RedBlackTree:
                     return attempt
             return self.label
 
-    def get_max(self):
-        """Returns the largest element in this tree.
-        This method is guaranteed to run in O(log(n)) time.
-        """
-        if self.right:
-            # Go as far right as possible
-            return self.right.get_max()
-        else:
-            return self.label
-
-    def get_min(self):
-        """Returns the smallest element in this tree.
-        This method is guaranteed to run in O(log(n)) time.
-        """
-        if self.left:
-            # Go as far left as possible
-            return self.left.get_min()
-        else:
-            return self.label
-
-    @property
-    def grandparent(self):
-        """Get the current node's grandparent, or None if it doesn't exist.
-        获取祖父节点
-        """
-        if self.parent is None:
-            return None
-        else:
-            return self.parent.parent
-
-    @property
-    def sibling(self):
-        """Get the current node's sibling, or None if it doesn't exist.
-        获取兄弟节点
-        """
-        if self.parent is None:
-            return None
-        elif self.parent.left is self:
-            return self.parent.right
-        else:
-            return self.parent.left
-
-    def is_left(self):
-        """Returns true iff this node is the left child of its parent."""
-        return self.parent and self.parent.left is self
-
-    def is_right(self):
-        """Returns true iff this node is the right child of its parent."""
-        return self.parent and self.parent.right is self
-
-    def __bool__(self):
-        return True
-
-    def __len__(self):
-        """
-        Return the number of nodes in this tree.
-        """
-        ln = 1
-        if self.left:
-            ln += len(self.left)
-        if self.right:
-            ln += len(self.right)
-        return ln
-
-    def preorder_traverse(self):
-        yield self.label
-        if self.left:
-            yield from self.left.preorder_traverse()
-        if self.right:
-            yield from self.right.preorder_traverse()
-
-    def inorder_traverse(self):
-        if self.left:
-            yield from self.left.inorder_traverse()
-        yield self.label
-        if self.right:
-            yield from self.right.inorder_traverse()
-
-    def postorder_traverse(self):
-        if self.left:
-            yield from self.left.postorder_traverse()
-        if self.right:
-            yield from self.right.postorder_traverse()
-        yield self.label
-
-    def __repr__(self):
-        from pprint import pformat
-
-        if self.left is None and self.right is None:
-            return "'%s %s'" % (self.label, (self.color and "red") or "blk")
-        return pformat(
-            {
-                "%s %s"
-                % (self.label, (self.color and "red") or "blk"): (self.left, self.right)
-            },
-            indent=1,
-        )
-
-    def __eq__(self, other):
-        """Test if two trees are equal."""
-        if self.label == other.label:
-            return self.left == other.left and self.right == other.right
-        else:
-            return False
-
 
 def color(node):
     """Returns the color of a node, allowing for None leaves."""
     if node is None:
         return 0
     else:
-        return node.color
+        return node.color  # color: 0 if black, 1 if red
 
 
 def test_insert():
@@ -613,10 +560,10 @@ def test_insert():
               0-0
             /    \
          -8-0    8-1
-              /     \
-            4-0    11-0
-                  /    \
-                10-1  12-1
+                 /  \
+               4-0 11-0
+                    / \
+                 10-1 12-1
 
 
     """
@@ -655,3 +602,6 @@ def test_insert_and_search():
         return False
     return True
 
+
+if __name__ == '__main__':
+    print(test_insert())
