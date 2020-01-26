@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+Segment_tree creates a segment tree with a given array and function,
+allowing queries to be done later in log(N) time
+function takes 2 values and returns a same type value
+"""
 
 from queue import Queue
 from collections.abc import Sequence
@@ -19,6 +24,115 @@ class SegmentTreeNode(object):
 
 
 class SegmentTree(object):
+    """
+    >>> import operator
+    >>> num_arr = SegmentTree([2, 1, 5, 3, 4], operator.add)
+    >>> for node in num_arr.traverse():
+    ...     print(node)
+    ...
+    val: 15, start: 0, end: 4
+    val: 8, start: 0, end: 2
+    val: 7, start: 3, end: 4
+    val: 3, start: 0, end: 1
+    val: 5, start: 2, end: 2
+    val: 3, start: 3, end: 3
+    val: 4, start: 4, end: 4
+    val: 2, start: 0, end: 0
+    val: 1, start: 1, end: 1
+    >>>
+    >>> num_arr.update(1, 5)
+    >>> for node in num_arr.traverse():
+    ...     print(node)
+    ...
+    val: 19, start: 0, end: 4
+    val: 12, start: 0, end: 2
+    val: 7, start: 3, end: 4
+    val: 7, start: 0, end: 1
+    val: 5, start: 2, end: 2
+    val: 3, start: 3, end: 3
+    val: 4, start: 4, end: 4
+    val: 2, start: 0, end: 0
+    val: 5, start: 1, end: 1
+    >>>
+    >>> num_arr.query_range(3, 4)
+    7
+    >>> num_arr.query_range(2, 2)
+    5
+    >>> num_arr.query_range(1, 3)
+    13
+    >>>
+    >>> max_arr = SegmentTree([2, 1, 5, 3, 4], max)
+    >>> for node in max_arr.traverse():
+    ...     print(node)
+    ...
+    val: 5, start: 0, end: 4
+    val: 5, start: 0, end: 2
+    val: 4, start: 3, end: 4
+    val: 2, start: 0, end: 1
+    val: 5, start: 2, end: 2
+    val: 3, start: 3, end: 3
+    val: 4, start: 4, end: 4
+    val: 2, start: 0, end: 0
+    val: 1, start: 1, end: 1
+    >>>
+    >>> max_arr.update(1, 5)
+    >>> for node in max_arr.traverse():
+    ...     print(node)
+    ...
+    val: 5, start: 0, end: 4
+    val: 5, start: 0, end: 2
+    val: 4, start: 3, end: 4
+    val: 5, start: 0, end: 1
+    val: 5, start: 2, end: 2
+    val: 3, start: 3, end: 3
+    val: 4, start: 4, end: 4
+    val: 2, start: 0, end: 0
+    val: 5, start: 1, end: 1
+    >>>
+    >>> max_arr.query_range(3, 4)
+    4
+    >>> max_arr.query_range(2, 2)
+    5
+    >>> max_arr.query_range(1, 3)
+    5
+    >>>
+    >>> min_arr = SegmentTree([2, 1, 5, 3, 4], min)
+    >>> for node in min_arr.traverse():
+    ...     print(node)
+    ...
+    val: 1, start: 0, end: 4
+    val: 1, start: 0, end: 2
+    val: 3, start: 3, end: 4
+    val: 1, start: 0, end: 1
+    val: 5, start: 2, end: 2
+    val: 3, start: 3, end: 3
+    val: 4, start: 4, end: 4
+    val: 2, start: 0, end: 0
+    val: 1, start: 1, end: 1
+    >>>
+    >>> min_arr.update(1, 5)
+    >>> for node in min_arr.traverse():
+    ...     print(node)
+    ...
+    val: 2, start: 0, end: 4
+    val: 2, start: 0, end: 2
+    val: 3, start: 3, end: 4
+    val: 2, start: 0, end: 1
+    val: 5, start: 2, end: 2
+    val: 3, start: 3, end: 3
+    val: 4, start: 4, end: 4
+    val: 2, start: 0, end: 0
+    val: 5, start: 1, end: 1
+    >>>
+    >>> min_arr.query_range(3, 4)
+    3
+    >>> min_arr.query_range(2, 2)
+    5
+    >>> min_arr.query_range(1, 3)
+    3
+    >>>
+
+    """
     def __init__(self, collection: Sequence, function):
         self.collection = collection
         self.fn = function
@@ -81,50 +195,20 @@ class SegmentTree(object):
 
 
 if __name__ == '__main__':
-    print('求和线段树')
     import operator
-    num_arr = SegmentTree([2, 1, 5, 3, 4], operator.add)
-    for node in num_arr.traverse():
-        print(node)
-    print()
+    for fn in [operator.add, max, min]:
+        print('*' * 50)
+        arr = SegmentTree([2, 1, 5, 3, 4], fn)
+        for node in arr.traverse():
+            print(node)
+        print()
 
-    num_arr.update(1, 5)
-    for node in num_arr.traverse():
-        print(node)
-    print()
+        arr.update(1, 5)
+        for node in arr.traverse():
+            print(node)
+        print()
 
-    print(num_arr.query_range(3, 4))  # 7
-    print(num_arr.query_range(2, 2))  # 5
-    print(num_arr.query_range(1, 3))  # 13
-
-    print()
-    print('求最大值线段树')
-    max_arr = SegmentTree([2, 1, 5, 3, 4], max)
-    for node in max_arr.traverse():
-        print(node)
-    print()
-
-    max_arr.update(1, 5)
-    for node in max_arr.traverse():
-        print(node)
-    print()
-
-    print(max_arr.query_range(3, 4))  # 4
-    print(max_arr.query_range(2, 2))  # 5
-    print(max_arr.query_range(1, 3))  # 5
-
-    print()
-    print('求最小值线段树')
-    min_arr = SegmentTree([2, 1, 5, 3, 4], min)
-    for node in min_arr.traverse():
-        print(node)
-    print()
-
-    min_arr.update(1, 5)
-    for node in min_arr.traverse():
-        print(node)
-    print()
-
-    print(min_arr.query_range(3, 4))  # 3
-    print(min_arr.query_range(2, 2))  # 5
-    print(min_arr.query_range(1, 3))  # 3
+        print(arr.query_range(3, 4))  # 7
+        print(arr.query_range(2, 2))  # 5
+        print(arr.query_range(1, 3))  # 13
+        print()
