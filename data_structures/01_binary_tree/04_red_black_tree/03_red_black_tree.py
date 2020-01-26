@@ -452,19 +452,23 @@ class RedBlackTree:
             else:
                 self.parent.rotate_right()
 
-        r"""父节点肯定有
+        r"""
+        父节点肯定有，并且为黑，
+        根据后续处理一定有兄弟节点，并且兄弟节点为黑，
+        但兄弟节点的左右子节点要么为黑，要么不存在
         
-              A-0
-             /
-           B-0  ->self
-          /  \
-        None None
-
-           A-0
-            \
-           B-0  ->self
-          /  \
-        None None
+              A-0           A-0
+             /   \         /   \
+           B-0  S-0  =>  B-0  S-1
+          /  \          /   \
+        None None      None None
+        
+           A-0              A-0
+          /  \             /  \
+        S-0  B-0     =>  S-1  B-0
+             /  \             /  \
+           None None        None None
+           
         """
         if (
             color(self.parent) == 0
@@ -475,6 +479,25 @@ class RedBlackTree:
             self.sibling.color = 1
             self.parent._remove_repair()
             return
+
+        r"""
+        父节点肯定有，并且为红，
+        根据后续处理一定有兄弟节点，并且兄弟节点为黑，
+        但兄弟节点的左右子节点要么为黑，要么不存在
+
+              A-1           A-0
+             /   \         /   \
+           B-0  S-0  =>  B-0  S-1
+          /  \          /   \
+        None None      None None
+
+           A-1              A-0
+          /  \             /  \
+        S-0  B-0     =>  S-1  B-0
+             /  \             /  \
+           None None        None None
+
+        """
         if (
             color(self.parent) == 1
             and color(self.sibling) == 0
@@ -485,8 +508,16 @@ class RedBlackTree:
             self.parent.color = 0
             return
 
-
-
+        r"""
+        
+                  A                      A                       A
+             /       \                 /    \                  /    \
+           B-0       S-0      =>      B-0   C-1    =>         B-0   C-0
+          /  \      /   \            /   \    \              /   \    \
+        None None C-1 为黑或者没有   None None  S-0          None None  S-1
+                                                \                      \
+                                             为黑或者没有                为黑或者没有
+        """
         if (
             self.is_left()
             and color(self.sibling) == 0
@@ -497,8 +528,30 @@ class RedBlackTree:
             self.sibling.color = 0
             self.sibling.right.color = 1
 
+        r"""
+                      A
+                 /        \
+                S-0       B-0
+              /    \      /  \
+        为黑或者没有 C-1   None None
+        
+                 A
+              /     \
+            C-1    B-0
+             /    /   \
+           S-0  None None
+           /
+        为黑或者没有
 
-
+                 A
+              /     \
+            C-0    B-0
+             /    /   \
+           S-1  None None
+           /
+        为黑或者没有
+        
+        """
         if (
             self.is_right()
             and color(self.sibling) == 0
@@ -509,7 +562,15 @@ class RedBlackTree:
             self.sibling.color = 0
             self.sibling.left.color = 1
 
-
+        r"""
+                    G
+                   /
+                  A
+             /       \
+           B-0       S-0
+          /  \         \
+        None None      C-1
+        """
         if (
             self.is_left()
             and color(self.sibling) == 0
@@ -520,7 +581,15 @@ class RedBlackTree:
             self.parent.color = 0
             self.parent.sibling.color = 0
 
-
+        r"""
+                        G
+                       /
+                      A
+                 /        \
+                S-0       B-0
+              /           /  \
+             C-1        None None
+        """
         if (
             self.is_right()
             and color(self.sibling) == 0
