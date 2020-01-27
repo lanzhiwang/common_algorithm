@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from queue import Queue
+
 
 class RedBlackTree:
     def __init__(self, label=None, color=0, parent=None, left=None, right=None):
@@ -230,6 +232,21 @@ class RedBlackTree:
             yield from self.right.postorder_traverse()
         yield self.label
 
+    def breadth_traversal(self):
+        result = []
+        queue = Queue()
+        queue.put(self)
+        while not queue.empty():
+            node = queue.get()
+            result.append((node.label, node.color))
+
+            if node.left is not None:
+                queue.put(node.left)
+
+            if node.right is not None:
+                queue.put(node.right)
+        return result
+
     def __contains__(self, label):
         """Search through the tree for label, returning True iff it is
         found somewhere in the tree.
@@ -322,8 +339,6 @@ class RedBlackTree:
                 uncle.color = 0
                 self.grandparent.color = 1
                 self.grandparent._insert_repair()
-
-    ###################################################################################
 
     def remove(self, label):
         print('&&&&&&& self: %s' % self)
@@ -645,6 +660,8 @@ class RedBlackTree:
             self.grandparent.color = self.parent.color
             self.parent.color = 0
             self.parent.sibling.color = 0
+
+    ###################################################################################
 
     def check_color_properties(self):
         """Check the coloring of the tree, and return True iff the tree
@@ -1072,6 +1089,14 @@ def test_insert_delete():
     [15, -12, 9]
     
     ********* delete 15 *********
+               8-0
+          /          \
+        0-1         12-1
+       /   \       /   \
+    -12-0 4-0    10-0 15-0
+      \         /   \
+    -8-1       9-1 11-1
+
     &&&&&&& self: {'8 blk': ({'0 red': ({'-12 blk': (None, '-8 red')}, '4 blk')},
                {'12 red': ({'10 blk': ('9 red', '11 red')}, '15 blk')})}
     &&&&&&& label: 15
@@ -1080,9 +1105,44 @@ def test_insert_delete():
     &&&&&&& self: '15 blk'
     &&&&&&& label: 15
     child: None
+    
+            8-0
+        /        \
+       0-1       10-0
+      /   \     /   \
+    -12-0 4-0  9-1 12-1
+      \            /   \
+     -8-1         11-1 15-0
+
+            8-0
+        /        \
+       0-1       10-1
+      /   \     /   \
+    -12-0 4-0  9-0 12-0
+      \            /   \
+     -8-1         11-1 15-0
+    
+            8-0
+        /        \
+       0-1       10-1
+      /   \     /   \
+    -12-0 4-0  9-0 12-0
+      \            /
+     -8-1         11-1
+    
+    [(8, 0), (0, 1), (10, 1), (-12, 0), (4, 0), (9, 0), (12, 0), (-8, 1), (11, 1)]
     {'8 blk': ({'0 red': ({'-12 blk': (None, '-8 red')}, '4 blk')},
-               {'10 red': ('9 blk', {'12 blk': ('11 red', None)})})}
+           {'10 red': ('9 blk', {'12 blk': ('11 red', None)})})}
+    
     ********* delete -12 *********
+            8-0
+        /        \
+       0-1       10-1
+      /   \     /   \
+    -12-0 4-0  9-0 12-0
+      \            /
+     -8-1         11-1
+    
     &&&&&&& self: {'8 blk': ({'0 red': ({'-12 blk': (None, '-8 red')}, '4 blk')},
                {'10 red': ('9 blk', {'12 blk': ('11 red', None)})})}
     &&&&&&& label: -12
@@ -1091,9 +1151,28 @@ def test_insert_delete():
     &&&&&&& self: {'-12 blk': (None, '-8 red')}
     &&&&&&& label: -12
     child: '-8 red'
+
+            8-0
+        /        \
+       0-1       10-1
+      /   \     /   \
+    -8-0 4-0  9-0 12-0
+                   /
+                 11-1
+    
+    [(8, 0), (0, 1), (10, 1), (-8, 0), (4, 0), (9, 0), (12, 0), (11, 1)]
     {'8 blk': ({'0 red': ('-8 blk', '4 blk')},
                {'10 red': ('9 blk', {'12 blk': ('11 red', None)})})}
     ********* delete 9 *********
+    
+            8-0
+        /        \
+       0-1       10-1
+      /   \     /   \
+    -8-0 4-0  9-0 12-0
+                   /
+                 11-1
+
     &&&&&&& self: {'8 blk': ({'0 red': ('-8 blk', '4 blk')},
                {'10 red': ('9 blk', {'12 blk': ('11 red', None)})})}
     &&&&&&& label: 9
@@ -1101,7 +1180,47 @@ def test_insert_delete():
     &&&&&&& label: 9
     &&&&&&& self: '9 blk'
     &&&&&&& label: 9
+
+            8-0
+        /        \
+       0-1       10-1
+      /   \     /   \
+    -8-0 4-0  9-0   11-1
+                      \
+                     12-0
+
+            8-0
+        /        \
+       0-1       10-1
+      /   \     /   \
+    -8-0 4-0  9-0   11-0
+                      \
+                     12-1
+    
+            8-0
+          /    \
+       0-1     11-0
+      /   \    /   \
+    -8-0 4-0  10-1 12-1
+               /
+              9-0
+
+            8-0
+          /    \
+       0-1     11-1
+      /   \    /   \
+    -8-0 4-0  10-0 12-0
+               /
+              9-0
+
+            8-0
+          /    \
+       0-1     11-1
+      /   \    /   \
+    -8-0 4-0  10-0 12-0
+    
     child: None
+    [(8, 0), (0, 1), (11, 1), (-8, 0), (4, 0), (10, 0), (12, 0)]
     {'8 blk': ({'0 red': ('-8 blk', '4 blk')}, {'11 red': ('10 blk', '12 blk')})}
 
     """
@@ -1116,9 +1235,8 @@ def test_insert_delete():
     for i in [15, -12, 9]:
         print('********* delete %s *********' % i)
         tree = tree.remove(i)
+        print(tree.breadth_traversal())
         print(tree)
-
-
 
     if not tree.check_color_properties():
         return False
