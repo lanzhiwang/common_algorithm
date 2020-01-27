@@ -661,8 +661,6 @@ class RedBlackTree:
             self.parent.color = 0
             self.parent.sibling.color = 0
 
-    ###################################################################################
-
     def check_color_properties(self):
         """Check the coloring of the tree, and return True iff the tree
         is colored in a way which matches these five properties:
@@ -714,9 +712,28 @@ class RedBlackTree:
         return True
 
     def black_height(self):
-        """Returns the number of black nodes from this node to the
+        r"""Returns the number of black nodes from this node to the
         leaves of the tree, or None if there isn't one such value (the
         tree is color incorrectly).
+
+                   8-0
+              /          \
+            0-1         12-1
+           /   \       /   \
+        -12-0 4-0    10-0 15-0
+          \         /   \
+        -8-1       9-1 11-1
+
+                                            8-0-3
+                           /                                  \
+                        0-1-2                                12-2
+                  /              \                    /                \
+             -12-0-2           4-0-2              10-0-2              15-0-2
+            /       \          /   \          /            \         /     \
+        NIL-0-1   -8-1-1  NIL-0-1  NIL-0-1  9-1-1         11-1-1  NIL-0-1  NIL-0-1
+                  /    \                   /   \          /    \
+             NIL-0-1  NIL-0-1         NIL-0-1  NIL-0-1  NIL-0-1 NIL-0-1
+
         """
         if self is None:
             # If we're already at a leaf, there is no path
@@ -732,6 +749,8 @@ class RedBlackTree:
         # Return the black depth of children, plus one if this node is
         # black
         return left + (1 - self.color)
+
+    ###################################################################################
 
     # Here are functions which are general to all binary search trees
 
@@ -1240,6 +1259,7 @@ def test_insert_delete():
 
     if not tree.check_color_properties():
         return False
+
     if list(tree.inorder_traverse()) != [-8, 0, 4, 8, 10, 11, 12]:
         return False
     return True
