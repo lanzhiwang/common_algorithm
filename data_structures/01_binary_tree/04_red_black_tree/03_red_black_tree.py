@@ -604,38 +604,38 @@ class RedBlackTree:
             self.parent.color = 0
             self.parent.sibling.color = 0
 
-r"""
-祖父节点有，但不知道颜色
-也不知道父节点是祖父节点的左子树还是右子树
-     G
-     |
-     A
-  /     \
- S-0    B-0
- /      /  \
-C-1   None None
+        r"""
+        祖父节点有，但不知道颜色
+        也不知道父节点是祖父节点的左子树还是右子树
+             G
+             |
+             A
+          /     \
+         S-0    B-0
+         /      /  \
+        C-1   None None
+        
+           G
+           |
+          S-0
+         /  \
+        C-1  A
+              \
+              B-0
+              / \
+            None None
 
-   G
-   |
-  S-0
- /  \
-C-1  A
-      \
-      B-0
-      / \
-    None None
-
-   G-
-   |
-  S-0
- /  \
-C-0  A-0
-      \
-      B-0
-      / \
-    None None
-
-"""
+           G-
+           |
+          S-0
+         /  \
+        C-0  A-0
+              \
+              B-0
+              / \
+            None None
+        
+        """
         if (
             self.is_right()
             and color(self.sibling) == 0
