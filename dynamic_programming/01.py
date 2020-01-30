@@ -83,7 +83,7 @@ if __name__ == '__main__':
         print(task)
 
     opt = [None] * len(tasks)
-    opt[0] = 5
+    opt[0] = tasks[0].value
     for i in range(1, len(tasks)):
         if tasks[i].prev is None:
             select = tasks[i].value
