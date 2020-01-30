@@ -4,11 +4,6 @@
 r"""
 https://www.youtube.com/watch?v=1BAsAgdx7Ac
 
-https://www.youtube.com/watch?v=Jakbj4vaIbE
-
-
-
-
 opt(i) i = 0 1 2 3 4 5 6 7
 
 opt(7)
@@ -77,6 +72,7 @@ if __name__ == '__main__':
     tasks = []
     for t in [(5, 1, 4), (1, 3, 5), (8, 0, 6), (4, 4, 7), (6, 3, 8), (3, 5, 9), (2, 6, 10), (4, 8, 11)]:
         tasks.append(Task(*t))
+
     for i in range(1, len(tasks)):
         for j in range(i-1, -1, -1):
             if tasks[j].end <= tasks[i].start or tasks[j].start >= tasks[i].end:
@@ -88,7 +84,6 @@ if __name__ == '__main__':
 
     opt = [None] * len(tasks)
     opt[0] = 5
-
     for i in range(1, len(tasks)):
         if tasks[i].prev is None:
             select = tasks[i].value
@@ -98,4 +93,3 @@ if __name__ == '__main__':
         opt[i] = max(select, no_select)
 
     print(opt)
-
