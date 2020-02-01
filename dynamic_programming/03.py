@@ -88,6 +88,20 @@ arr = [3, 34, 4, 12, 5, 2]
  / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \   / \    / \
 60 57 26 23 56 53 22 19 48 45 14 11 44 41 10  7 55 52 21 18 51 48 17 14 43 40 9   6 39 36 5   2 58 55 24 21 54 51 20 17 46 43 12  9 42 39 8   5 53 50 19 16 49 46 15 12 41 38 7   4 37  34 3   0
 
+     0
+    / -> 5
+   2
+    \ -> 4
+     2
+      \ -> 3
+       2
+      / -> 2
+     6
+      \ -> 1
+       6
+      / -> 0
+     9
+
 """
 
 arr = [3, 34, 4, 12, 5, 2]
@@ -166,3 +180,88 @@ for j in [26, 43]:
             result.append(i)
         temp = temp // 2
     print(result)
+
+"""
+[3, 34, 4, 12, 5, 2]
+
+
+[0] arr[5]
+[0, 2] arr[4]
+[0, 2, 7] arr[3]
+[0, 2, 7, 19] arr[2]
+[0, 2, 7, 19, 23] arr[1]
+[0, 2, 7, 19, 23, 57] arr[0]
+[0, 2, 7, 19, 23, 57, 69]
+
+
+
+[0, 2, 2, 2, 6, 6, 9]
+ 0  1  2  3  4  5  6
+ 5  4  3  2  1  0
+ 
+
+     0
+    / -> 5
+   2
+    \ -> 4
+     2
+      \ -> 3
+       2
+      / -> 2
+     6
+      \ -> 1
+       6
+      / -> 0
+     9
+
+
+[0, 0, 5, 5, 9, 9, 9]
+
+
+
+"""
+print()
+print()
+print()
+print()
+print()
+def get_all_list(collection, index, arr):
+    length = len(collection)
+    if index == 0:
+        collection.append(collection[-1] + arr[index])
+        if collection[-1] == 9:
+            print(collection)
+            result = []
+            for i in range(0, len(collection)-1):
+                if collection[i] != collection[i+1]:
+                    result.append(len(arr)-1-i)
+            print(result[::-1])
+            sum = 0
+            for j in result:
+                sum = sum + arr[j]
+            print(sum)
+
+        collection[-1] = collection[-2]
+        if collection[-1] == 9:
+            print(collection)
+            result = []
+            for i in range(0, len(collection) - 1):
+                if collection[i] != collection[i + 1]:
+                    result.append(len(arr) - 1 - i)
+            print(result[::-1])
+            sum = 0
+            for j in result:
+                sum = sum + arr[j]
+            print(sum)
+        return
+
+    collection = collection[0:length]
+    collection.append(collection[-1] + arr[index])
+    get_all_list(collection, index-1, arr)
+
+    collection = collection[0:length]
+    collection.append(collection[-1])
+    get_all_list(collection, index-1, arr)
+
+
+get_all_list([0], len(arr)-1, arr)
