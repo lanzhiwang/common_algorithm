@@ -4,7 +4,7 @@
 import random
 
 """
-检查图中是否存在环
+检查图数据和结构或者链表数据结构中是否存在环
 """
 
 
@@ -115,4 +115,91 @@ if __name__ == '__main__':
     
     图中无环
     
+    """
+
+    graph = {
+        '0': ['1'],
+        '1': ['0', '2'],
+        '2': ['1', '3'],
+        '3': ['2']
+    }
+    all_edge = get_all_edge(graph)
+    random.shuffle(all_edge)
+    print(all_edge)
+    print(bfs(graph, '0'))
+    """
+    [['2', '3'], ['0', '1'], ['1', '2']]
+    ['0', '1', '2', '3']
+    
+    ['2', '3']
+    disjoint set
+    2, 3
+    
+    ['0', '1']
+    disjoint set1
+    2, 3
+    disjoint set2
+    0, 1
+    
+    ['1', '2']
+    disjoint set
+    0, 1, 2, 3
+    
+    链表中无环
+
+    """
+
+    graph = {
+        '0': ['1'],
+        '1': ['0', '2'],
+        '2': ['1', '3'],
+        '3': ['2', '4', '6'],
+        '4': ['3', '5'],
+        '5': ['4', '6'],
+        '6': ['3', '5']
+    }
+    all_edge = get_all_edge(graph)
+    random.shuffle(all_edge)
+    print(all_edge)
+    print(bfs(graph, '0'))
+    """
+    [['2', '3'], ['5', '6'], ['3', '4'], ['0', '1'], ['1', '2'], ['3', '6'], ['4', '5']]
+    ['0', '1', '2', '3', '4', '6', '5']
+    
+    ['2', '3']
+    disjoint set
+    2, 3
+    
+    ['5', '6']
+    disjoint set1
+    2, 3
+    disjoint set2
+    5, 6
+    
+    ['3', '4']
+    disjoint set1
+    2, 3, 4
+    disjoint set2
+    5, 6
+    
+    ['0', '1']
+    disjoint set1
+    2, 3, 4
+    disjoint set2
+    5, 6
+    disjoint set3
+    0, 1
+    
+    ['1', '2']
+    disjoint set1
+    2, 3, 4, 1, 0
+    disjoint set2
+    5, 6
+    
+    ['3', '6']
+    disjoint set
+    2, 3, 4, 1, 0, 5, 6
+    
+    ['4', '5'] 链表中有环
+
     """
