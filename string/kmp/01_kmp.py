@@ -4,7 +4,7 @@ r"""
 
 KMP 是字符串匹配算法
 
-在 T 中找到 P 字符串
+在 T 中找到 P 字符串，假设 P 字符串较短
 T: a b a a c a b a b c a c
 P: a b a b c
 
