@@ -5,6 +5,9 @@ import random
 
 """
 检查图数据和结构或者链表数据结构中是否存在环
+
+https://www.youtube.com/watch?v=YKE4Vd1ysPI
+
 """
 
 
