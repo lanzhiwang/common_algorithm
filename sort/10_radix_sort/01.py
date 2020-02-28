@@ -20,6 +20,38 @@ for number in collection:
     print(number // 1000 % 10)  # 千位
     print(number // 10000 % 10)  # 万位
 
+"""
+number: 2
+2
+0
+0
+0
+0
+number: 15
+5
+1
+0
+0
+0
+number: 123
+3
+2
+1
+0
+0
+number: 1234
+4
+3
+2
+1
+0
+number: 0
+0
+0
+0
+0
+0
+"""
 print()
 print()
 
@@ -28,25 +60,24 @@ collection = [2, 15, 123, 1234]
 print(collection)
 max_value = max(collection)
 print(max_value)
+"""
+[2, 15, 123, 1234]
+1234
+n: 4
+"""
 
-# print(max_value // 1)
-# print(max_value // 10)
-# print(max_value // 100)
-# print(max_value // 1000)
-# print(max_value // 10000)
+print(max_value // 1)  # 1234
+print(max_value // 10)  # 123
+print(max_value // 100)  # 12
+print(max_value // 1000)  # 1
+print(max_value // 10000)  # 0
 
 n = 1
 exp = 10
-# while True:
-#     number = (max_value // exp)
-#     if number > 0:
-#         n += 1
-#         exp *= 10
-#     else:
-#         break
-# print('n: %s' % n)
-
 while max_value // exp:
     n += 1
     exp *= 10
 print('n: %s' % n)
+"""
+n: 4
+"""
