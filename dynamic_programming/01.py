@@ -108,7 +108,7 @@ if __name__ == '__main__':
     tasks[0].no_select = 0
     tasks[0].select = tasks[0].value
     opt = [None] * len(tasks)
-    opt[0] = tasks[0].value
+    opt[0] = max(tasks[0].value, tasks[0].no_select)
     for i in range(1, len(tasks)):  # 1 2 3 4 5 6 7
         if tasks[i].prev is None:
             select = tasks[i].value

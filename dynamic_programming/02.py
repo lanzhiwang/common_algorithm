@@ -4,6 +4,8 @@
 r"""
 https://www.youtube.com/watch?v=Jakbj4vaIbE
 
+选择不相邻的一组数字使得相加的和最大
+
 测试数据一:
 [4, 1, 1, 9, 1] -> 13
 
@@ -92,7 +94,7 @@ if __name__ == '__main__':
     nodes[0].no_select = 0
     nodes[0].select = nodes[0].value
     opt = [None] * len(nodes)
-    opt[0] = nodes[0].value
+    opt[0] = max(nodes[0].no_select, nodes[0].select)
     for i in range(1, len(nodes)):  # 1 2 3 4 5 6
         if nodes[i].prev is None:
             select = nodes[i].value
