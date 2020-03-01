@@ -10,7 +10,7 @@ class Node:
 def display(tree):
     """In Order traversal of the tree
     """
-    if tree is None: 
+    if tree is None:
         return
 
     if tree.left is not None:
@@ -87,3 +87,112 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+r"""
+
+         1
+      /    \
+     2      3
+    / \    /
+   4   5  6
+      /  /
+     7  8
+         \
+          9
+
+depth_of_tree(1)
+    depth_of_tree(2)  # return 3
+    depth_of_tree(3)  # return 4
+    return 1 + max(3, 4) = 5
+
+depth_of_tree(2)
+    depth_of_tree(4)  # return 1
+    depth_of_tree(5)  # return 2
+    return 1 + max(1, 2) = 3
+
+depth_of_tree(3)
+    depth_of_tree(6)  # return 3
+    depth_of_tree()  # return 0
+    return 1 + max(3, 0) = 4
+
+depth_of_tree(4)
+    depth_of_tree()  # return 0
+    depth_of_tree()  # return 0
+    return 1 + max(0, 0) = 1
+
+depth_of_tree(5)
+    depth_of_tree(7)  # return 1
+    depth_of_tree()  # return 0
+    return 1 + max(1, 0) = 2
+
+depth_of_tree(6)
+    depth_of_tree(8)  # return 2
+    depth_of_tree()  # return 0
+    return 1 + max(2, 0) = 3
+
+depth_of_tree(7)
+    depth_of_tree()  return 0
+    depth_of_tree()  return 0
+    return 1 + max(0, 0) = 1
+
+depth_of_tree(8)
+    depth_of_tree()  return 0
+    depth_of_tree(9) return 1
+    return 1 + max(0, 1) = 2
+
+depth_of_tree(9)
+    depth_of_tree()  return 0
+    depth_of_tree()  return 0
+    return 1 + max(0, 0) = 1
+
+depth_of_tree()
+    return 0
+"""
+
+r"""
+
+         1
+      /    \
+     2      3
+    / \    / \
+   4   5  6   7
+  / \    /
+ 8   9  10
+
+
+is_full_binary_tree(1)
+    is_full_binary_tree(2)  # return True
+    is_full_binary_tree(3)  # return False
+    return False
+
+is_full_binary_tree(2)
+    is_full_binary_tree(4)  # return True
+    is_full_binary_tree(5)  # return True
+    return True
+
+is_full_binary_tree(3)
+    is_full_binary_tree(6)  # return False
+    is_full_binary_tree(7)  # return True
+    return False
+
+is_full_binary_tree(4)
+    is_full_binary_tree(8)  # return True
+    is_full_binary_tree(9)  # return True
+    return True
+
+is_full_binary_tree(5)
+    return True
+
+is_full_binary_tree(6)
+    return False
+
+is_full_binary_tree(7)
+    return True
+
+is_full_binary_tree(8)
+    return True
+
+is_full_binary_tree(9)
+    return True
+
+"""

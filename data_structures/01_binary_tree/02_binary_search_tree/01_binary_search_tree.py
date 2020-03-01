@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import sys
-import inspect
+from queue import Queue
 
 '''
 二叉查找树（Binary Search Tree），也称有序二叉树（ordered binary tree）,排序二叉树（sorted binary tree），
@@ -19,62 +18,61 @@ import inspect
 
 
 class Node(object):
-    def __init__(self, label, parent):
-        self.label = label
+    def __init__(self, value, parent):
+        self.value = value
         self.left = None
         self.right = None
         #Added in order to delete a node easier
         self.parent = parent
 
-    def getLabel(self):
-        return self.label
+    def get_value(self):
+        return self.value
 
-    def setLabel(self, label):
-        self.label = label
+    def set_value(self, value):
+        self.label = value
 
-    def getLeft(self):
+    def get_left(self):
         return self.left
 
-    def setLeft(self, left):
+    def set_left(self, left):
         self.left = left
 
-    def getRight(self):
+    def get_right(self):
         return self.right
 
-    def setRight(self, right):
+    def set_right(self, right):
         self.right = right
 
-    def getParent(self):
+    def get_parent(self):
         return self.parent
 
-    def setParent(self, parent):
+    def set_parent(self, parent):
         self.parent = parent
 
     def __str__(self):
-        if (self.getLeft() is not None) and (self.getRight() is not None):
-            return 'label: %s, left: %s, right: %s' % (
-                self.getLabel(), self.getLeft().getLabel(), self.getRight().getLabel())
+        if (self.get_left() is not None) and (self.get_right() is not None):
+            return 'value: %s, left: %s, right: %s' % (
+                self.get_value(), self.get_left().get_value(), self.get_right().get_value())
 
-        elif (self.getLeft() is None) and (self.getRight() is not None):
+        elif (self.get_left() is None) and (self.get_right() is not None):
             return 'label: %s, left: %s, right: %s' % (
-                self.getLabel(), None, self.getRight().getLabel())
+                self.get_value(), None, self.get_right().get_value())
 
-        elif (self.getLeft() is not None) and (self.getRight() is None):
+        elif (self.get_left() is not None) and (self.get_right() is None):
             return 'label: %s, left: %s, right: %s' % (
-                self.getLabel(), self.getLeft().getLabel(), None)
+                self.get_value(), self.get_left().get_value(), None)
 
         else:
             return 'label: %s, left: %s, right: %s' % (
-                self.getLabel(), None, None)
-
+                self.get_value(), None, None)
 
 
 class BinarySearchTree:
     def __init__(self):
         self.root = None
 
-    def insert(self, label):
-        new_node = Node(label, None)
+    def insert(self, value):
+        new_node = Node(value, None)
 
         if self.empty():
             self.root = new_node
@@ -82,152 +80,94 @@ class BinarySearchTree:
             curr_node = self.root
             while curr_node is not None:
                 parent_node = curr_node
-                if new_node.getLabel() < curr_node.getLabel():
-                    curr_node = curr_node.getLeft()
+                if new_node.get_value() < curr_node.get_value():
+                    curr_node = curr_node.get_left()
                 else:
-                    curr_node = curr_node.getRight()
+                    curr_node = curr_node.get_right()
 
-            if new_node.getLabel() < parent_node.getLabel():
-                parent_node.setLeft(new_node)
+            if new_node.get_value() < parent_node.get_value():
+                parent_node.set_left(new_node)
             else:
-                parent_node.setRight(new_node)
-            new_node.setParent(parent_node)
+                parent_node.set_right(new_node)
+            new_node.set_parent(parent_node)
 
     def empty(self):
         if self.root is None:
             return True
         return False
 
-    def getRoot(self):
+    def get_root(self):
         return self.root
 
-    def __InOrderTraversal(self, curr_node):
-        nodeList = []
-        if curr_node is not None:
-            nodeList.insert(0, curr_node)
-            nodeList = nodeList + self.__InOrderTraversal(curr_node.getLeft())
-            nodeList = nodeList + self.__InOrderTraversal(curr_node.getRight())
-        return nodeList
+    # 先序(前序)遍历
+    def __InOrderTraversal(self, node=None):
+        if node is None:
+            node = self.get_root()
+        node_list = []
+        node_list.append(node)
+        if node.get_left() is not None:
+            node_list.extend(self.__InOrderTraversal(node.get_left()))
+        if node.get_right() is not None:
+            node_list.extend(self.__InOrderTraversal(node.get_right()))
+        return node_list
+
+    # 中序遍历
+    def middle_traversal(self, node=None):
+        if node is None:
+            node = self.get_root()
+        node_list = []
+        if node.get_left() is not None:
+            node_list.extend(self.middle_traversal(node.get_left()))
+        node_list.append(node.get_value())
+        if node.get_right() is not None:
+            node_list.extend(self.middle_traversal(node.get_right()))
+        return node_list
+
+
+    # 广度遍历
+    def breadth_traversal(self, node=None):
+        if node is None:
+            node = self.get_root()
+        node_list = []
+        queue = Queue()
+        queue.put(node)
+        while not queue.empty():
+            val = queue.get()
+            node_list.append(val.get_value())
+            if val.get_left() is not None:
+                queue.put(val.get_left())
+            if val.get_right() is not None:
+                queue.put(val.get_right())
+        return node_list
 
     def __str__(self):
-        list = self.__InOrderTraversal(self.root)
+        node_list = self.__InOrderTraversal(self.root)
         str = ""
-        for x in list:
-            str = str + " " + x.getLabel().__str__()
+        for x in node_list:
+            str = str + " " + x.get_value().__str__()
         return str
-
-
-"""
-中序遍历
-"""
-# class display(object):
-#     def __call__(self, tree):
-#         if tree is None:
-#             return
-#
-#         if tree.getLeft() is not None:
-#             self.__call__(tree.getLeft())
-#
-#         print(tree.getLabel())
-#
-#         if tree.getRight() is not None:
-#             self.__call__(tree.getRight())
-#
-#         return
-
-def display(tree): #In Order traversal of the tree
-
-    if tree is None:
-        return
-
-    if tree.getLeft() is not None:
-        display(tree.getLeft())
-
-    print(tree.getLabel())
-
-    if tree.getRight() is not None:
-        display(tree.getRight())
-
-    return
-
-
-
-"""
-中序遍历
-"""
-class display1(object):
-    def __call__(self, tree):
-        result = []
-
-        if tree is None:
-            return result
-
-        left_node = tree.getLeft()
-        if left_node is not None:
-            result = result + self.__call__(left_node)
-
-        result = result + [tree.getLabel()]
-
-        right_node = tree.getRight()
-        if right_node is not None:
-            result = result + self.__call__(right_node)
-
-        return result
-
-# def display1(tree): #In Order traversal of the tree
-#     result = []
-#
-#     if tree is None:
-#         return result
-#
-#     left_node = tree.getLeft()
-#     if left_node is not None:
-#         result = result + display1(left_node)
-#
-#     result = result + [tree.getLabel()]
-#
-#     right_node = tree.getRight()
-#     if right_node is not None:
-#         result = result + display1(right_node)
-#
-#     return result
 
 
 def testBinarySearchTree():
     r'''
     Example
-                  8
-                 / \
-                3   10
-               / \    \
-              1   6    14
-                 / \   /
-                4   7 13
-    '''
-
-    r'''
-    Example After Deletion
-                  7
-                 / \
-                1   4
-
+          8
+         / \
+        3   10
+       / \    \
+      1   6    14
+         / \   /
+        4   7 13
     '''
     t = BinarySearchTree()
-    t.insert(8)
-    t.insert(3)
-    t.insert(6)
-    t.insert(1)
-    t.insert(10)
-    t.insert(14)
-    t.insert(13)
-    t.insert(4)
-    t.insert(7)
+    for i in [8, 3, 6, 1, 10, 14, 13, 4, 7]:
+        t.insert(i)
 
     #Prints all the elements of the list in order traversal
-    print(t.__str__())  # 8 3 1 6 4 7 10 14 13
+    print(t)  # 8 3 1 6 4 7 10 14 13
 
-    display(t.getRoot())
-    print(display1()(t.getRoot()))
+    print(t.breadth_traversal())  # [8, 3, 10, 1, 6, 14, 4, 7, 13]
+    print(t.middle_traversal())  # [1, 3, 4, 6, 7, 8, 10, 13, 14]
 
 
 if __name__ == "__main__":
