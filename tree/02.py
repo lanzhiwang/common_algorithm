@@ -23,37 +23,29 @@ r"""
 广度遍历
 1 2 3 4 5 6 7
 
-            1-0
-         /       \
-       2-1      3-2
-      /   \     /  \
-    4-3  5-4  6-5 7-6
-
 """
 
+
 class Node(object):
-    def __init__(self, value, left, right):
+    def __init__(self, value, left=None, right=None):
         self.value = value
         self.left = left
         self.right = right
 
     def __str__(self):
-        return 'value=%s, left=%s, right=%s' % (self.value, self.left, self.right)
+        return 'value=%s, left=%s, right=%s' % (self.value, self.left.value, self.right.value)
 
-
-node0 = Node(1, 1, 2)
-node1 = Node(2, 3, 4)
-node2 = Node(3, 5, 6)
-node3 = Node(4, -1, -1)
-node4 = Node(5, -1, -1)
-node5 = Node(6, -1, -1)
-node6 = Node(7, -1, -1)
-
-nodes = [node0, node1, node2, node3, node4, node5, node6]
+root = Node(1)
+root.left = Node(2)
+root.right = Node(3)
+root.left.left = Node(4)
+root.left.right = Node(5)
+root.right.left = Node(6)
+root.right.right = Node(7)
 
 
 # 广度遍历
-def breadth_traversal(nodes, root):
+def breadth_traversal(node):
     result = []
     queue = Queue()
     queue.put(root)
@@ -61,13 +53,13 @@ def breadth_traversal(nodes, root):
         node = queue.get()
         result.append(node.value)
 
-        if node.left != -1:
-            queue.put(nodes[node.left])
+        if node.left is not None:
+            queue.put(node.left)
 
-        if node.right != -1:
-            queue.put(nodes[node.right])
+        if node.right is not None:
+            queue.put(node.right)
     return result
 
 
 print('广度遍历')
-print(breadth_traversal(nodes, node0))
+print(breadth_traversal(root))
