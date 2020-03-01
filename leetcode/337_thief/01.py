@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
+r"""
 https://leetcode-cn.com/problems/house-robber-iii/
 
 在上次打劫完一条街道之后和一圈房屋后，小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为“根”。
@@ -11,7 +11,7 @@ https://leetcode-cn.com/problems/house-robber-iii/
 计算在不触动警报的情况下，小偷一晚能够盗取的最高金额。
 
 示例 1:
-输入: [3,2,3,null,3,null,1]
+输入: [3, 2, 3, None, 3, None, 1]
 
      3
     / \
@@ -22,8 +22,95 @@ https://leetcode-cn.com/problems/house-robber-iii/
 输出: 7
 解释: 小偷一晚能够盗取的最高金额 = 3 + 3 + 1 = 7.
 
+分析:
+[3, 2, 3, None, 3, None, 1]
+ 0  1  2  3     4  5     6
+
+            3-0
+        /         \
+      2-1         3-2
+     /   \       /   \
+  None-3 3-4  None-5 1-6
+
+计算父节点
+i (i-1)//2
+0 None
+1 0
+2 0
+3 1
+4 1
+5 2
+6 2
+
+0 -> 3, []
+    [1]
+    [0]
+    return 1 -> 2, [[1], [0]]
+
+
+1 -> 2, [[1], [0]]
+    [1, 0]
+    [0, 1]
+    [0, 0]
+    return 2 -> 3, [[1, 0], [0, 1], [0, 0]]
+
+2 -> 3, [[1, 0], [0, 1], [0, 0]]
+    [1, 0, 0]
+    [0, 1, 1]
+    [0, 1, 0]
+    [0, 0, 1]
+    [0, 0, 0]
+    return 3 -> None, [[1, 0, 0], [0, 1, 1], [0, 1, 0], [0, 0, 1], [0, 0, 0]]
+
+3 -> None, [[1, 0, 0], [0, 1, 1], [0, 1, 0], [0, 0, 1], [0, 0, 0]]
+    [1, 0, 0, None]
+    [0, 1, 1, None]
+    [0, 1, 0, None]
+    [0, 0, 1, None]
+    [0, 0, 0, None]
+    return 4 -> 3, [[1, 0, 0, None], [0, 1, 1, None], [0, 1, 0, None], [0, 0, 1, None], [0, 0, 0, None]]
+
+4 -> 3, [[1, 0, 0, None], [0, 1, 1, None], [0, 1, 0, None], [0, 0, 1, None], [0, 0, 0, None]]
+    [1, 0, 0, None, 1]
+    [1, 0, 0, None, 0]
+    [0, 1, 1, None, 0]
+    [0, 1, 0, None, 0]
+    [0, 0, 1, None, 1]
+    [0, 0, 1, None, 0]
+    [0, 0, 0, None, 1]
+    [0, 0, 0, None, 0]
+    return 5 -> None, [[1, 0, 0, None, 1], [1, 0, 0, None, 0], [0, 1, 1, None, 0], [0, 1, 0, None, 0], [0, 0, 1, None, 1], [0, 0, 1, None, 0], [0, 0, 0, None, 1], [0, 0, 0, None, 0]]
+
+5 -> None, [[1, 0, 0, None, 1], [1, 0, 0, None, 0], [0, 1, 1, None, 0], [0, 1, 0, None, 0], [0, 0, 1, None, 1], [0, 0, 1, None, 0], [0, 0, 0, None, 1], [0, 0, 0, None, 0]]
+    [1, 0, 0, None, 1, None]
+    [1, 0, 0, None, 0, None]
+    [0, 1, 1, None, 0, None]
+    [0, 1, 0, None, 0, None]
+    [0, 0, 1, None, 1, None]
+    [0, 0, 1, None, 0, None]
+    [0, 0, 0, None, 1, None]
+    [0, 0, 0, None, 0, None]
+    return 6 -> 1, [[1, 0, 0, None, 1, None], [1, 0, 0, None, 0, None], [0, 1, 1, None, 0, None], [0, 1, 0, None, 0, None], [0, 0, 1, None, 1, None], [0, 0, 1, None, 0, None], [0, 0, 0, None, 1, None], [0, 0, 0, None, 0, None]]
+
+6 -> 1, [[1, 0, 0, None, 1, None], [1, 0, 0, None, 0, None], [0, 1, 1, None, 0, None], [0, 1, 0, None, 0, None], [0, 0, 1, None, 1, None], [0, 0, 1, None, 0, None], [0, 0, 0, None, 1, None], [0, 0, 0, None, 0, None]]
+    [1, 0, 0, None, 1, None, 1]
+    [1, 0, 0, None, 1, None, 0]
+    [1, 0, 0, None, 0, None, 1]
+    [1, 0, 0, None, 0, None, 0]
+    [0, 1, 1, None, 0, None, 0]
+    [0, 1, 0, None, 0, None, 1]
+    [0, 1, 0, None, 0, None, 0]
+    [0, 0, 1, None, 1, None, 0]
+    [0, 0, 1, None, 0, None, 0]
+    [0, 0, 0, None, 1, None, 1]
+    [0, 0, 0, None, 1, None, 0]
+    [0, 0, 0, None, 0, None, 1]
+    [0, 0, 0, None, 0, None, 0]
+    return [[1, 0, 0, None, 1, None, 1], [1, 0, 0, None, 1, None, 0], [1, 0, 0, None, 0, None, 1], [1, 0, 0, None, 0, None, 0], [0, 1, 1, None, 0, None, 0], [0, 1, 0, None, 0, None, 1], [0, 1, 0, None, 0, None, 0], [0, 0, 1, None, 1, None, 0], [0, 0, 1, None, 0, None, 0], [0, 0, 0, None, 1, None, 1], [0, 0, 0, None, 1, None, 0], [0, 0, 0, None, 0, None, 1], [0, 0, 0, None, 0, None, 0]]
+
+
 示例 2:
-输入: [3,4,5,1,3,null,1]
+输入: [3, 4, 5, 1, 3, None, 1]
 
      3
     / \
@@ -37,187 +124,42 @@ https://leetcode-cn.com/problems/house-robber-iii/
 
 """
 
-
-# 先遍历出有多少种偷法
-
-"""
-
-        3-0
-      /     \
-    4-1    5-2
-   /   \     \
- 1-3   3-4   1-5
-
-node0
-[1, None, None, None, None, None]
-[0, None, None, None, None, None]
-
-node1
-[1, 0, None, None, None, None]
-[0, 1, None, None, None, None]
-[0, 0, None, None, None, None]
-
-node2
-[1, 0, 0, None, None, None]
-[0, 1, 1, None, None, None]
-[0, 1, 0, None, None, None]
-[0, 0, 1, None, None, None]
-[0, 0, 0, None, None, None]
-
-node3
-[1, 0, 0, 1, None, None]
-[1, 0, 0, 0, None, None]
-[0, 1, 1, 0, None, None]
-[0, 1, 0, 0, None, None]
-[0, 0, 1, 1, None, None]
-[0, 0, 1, 0, None, None]
-[0, 0, 0, 1, None, None]
-[0, 0, 0, 0, None, None]
-
-node4
-[1, 0, 0, 1, 1, None]
-[1, 0, 0, 1, 0, None]
-[1, 0, 0, 0, 1, None]
-[1, 0, 0, 0, 0, None]
-[0, 1, 1, 0, 0, None]
-[0, 1, 0, 0, 0, None]
-[0, 0, 1, 1, 1, None]
-[0, 0, 1, 1, 0, None]
-[0, 0, 1, 0, 1, None]
-[0, 0, 1, 0, 0, None]
-[0, 0, 0, 1, 1, None]
-[0, 0, 0, 1, 0, None]
-[0, 0, 0, 0, 1, None]
-[0, 0, 0, 0, 0, None]
-
-node5
-[1, 0, 0, 1, 1, 1]
-[1, 0, 0, 1, 1, 0]
-[1, 0, 0, 1, 0, 1]
-[1, 0, 0, 1, 0, 0]
-[1, 0, 0, 0, 1, 1]
-[1, 0, 0, 0, 1, 0]
-[1, 0, 0, 0, 0, 1]
-[1, 0, 0, 0, 0, 0]
-[0, 1, 1, 0, 0, 0]
-[0, 1, 0, 0, 0, 1]
-[0, 1, 0, 0, 0, 0]
-[0, 0, 1, 1, 1, 0]
-[0, 0, 1, 1, 0, 0]
-[0, 0, 1, 0, 1, 0]
-[0, 0, 1, 0, 0, 0]
-[0, 0, 0, 1, 1, 1]
-[0, 0, 0, 1, 1, 0]
-[0, 0, 0, 1, 0, 1]
-[0, 0, 0, 1, 0, 0]
-[0, 0, 0, 0, 1, 1]
-[0, 0, 0, 0, 1, 0]
-[0, 0, 0, 0, 0, 1]
-[0, 0, 0, 0, 0, 0]
-
-
-[3, 0, 0, 1, 3, 1] 8
-[3, 0, 0, 1, 3, 0] 7
-[3, 0, 0, 1, 0, 1] 5
-[3, 0, 0, 1, 0, 0] 4
-[3, 0, 0, 0, 3, 1] 7
-[3, 0, 0, 0, 3, 0] 6
-[3, 0, 0, 0, 0, 1] 4
-[3, 0, 0, 0, 0, 0] 3
-[0, 4, 5, 0, 0, 0] 9 **
-[0, 4, 0, 0, 0, 1] 5
-[0, 4, 0, 0, 0, 0] 4
-[0, 0, 5, 1, 3, 0] 9 **
-[0, 0, 5, 1, 0, 0] 6
-[0, 0, 5, 0, 3, 0] 8
-[0, 0, 5, 0, 0, 0] 5
-[0, 0, 0, 1, 3, 1] 5
-[0, 0, 0, 1, 3, 0] 4
-[0, 0, 0, 1, 0, 1] 2
-[0, 0, 0, 1, 0, 0] 1
-[0, 0, 0, 0, 3, 1] 4
-[0, 0, 0, 0, 3, 0] 3
-[0, 0, 0, 0, 0, 1] 1
-[0, 0, 0, 0, 0, 0] 0
-
-"""
-
-
-class Node(object):
-    def __init__(self, value, left, right, father):
-        self.value = value
-        self.left = left
-        self.right = right
-        self.father = father
-
-    def __str__(self):
-        return 'value=%s, left=%s, right=%s, father=%s' % (self.value, self.left, self.right, self.father)
-
-
-node0 = Node(3, 1, 2, -1)
-node1 = Node(4, 3, 4, 0)
-node2 = Node(5, -1, 5, 0)
-node3 = Node(1, -1, -1, 1)
-node4 = Node(3, -1, -1, 1)
-node5 = Node(1, -1, -1, 2)
-
-nodes = [node0, node1, node2, node3, node4, node5]
-
-
-def foo(index, node, last_result):
-    result = []
-
-    if node.father == -1:
-        result.append([1] + last_result[index + 1:])
-        result.append([0] + last_result[index + 1:])
-        return result
-    else:
-        for temp in last_result:
-            if temp[node.father] == 1:  # 父节点 偷
-                result.append(temp[0:index] + [0] + temp[index + 1:])
-            else:  # 父节点 不偷
-                result.append(temp[0:index] + [1] + temp[index + 1:])
-                result.append(temp[0:index] + [0] + temp[index + 1:])
-        return result
-
-
-temp = [None, None, None, None, None, None]
-result0 = []
-result1 = []
-result2 = []
-result3 = []
-result4 = []
-result5 = []
-for i in range(len(nodes)):
+def get_all_method(collections, i, last_time):
     if i == 0:
-        result0 = foo(i, nodes[i], temp)
-        print('result0: %s' % result0)
+        return get_all_method(collections, i+1, [[1], [0]])
+    elif i >= 1 and i <= len(collections) - 1:
+        temp = []
+        for lt in last_time:
+            if collections[i] is None:
+                lt.append(None)
+                temp.append(lt)
+            elif lt[(i-1)//2] == 0:
+                temp1 = lt[:]
+                temp1.append(1)
+                temp.append(temp1)
 
-    if i == 1:
-        result1 = foo(i, nodes[i], result0)
-        print('result1: %s' % result1)
+                temp2 = lt[:]
+                temp2.append(0)
+                temp.append(temp2)
 
-    if i == 2:
-        result2 = foo(i, nodes[i], result1)
-        print('result2: %s' % result2)
+            elif lt[(i-1)//2] == 1:
+                lt.append(0)
+                temp.append(lt)
+        if i != len(collections) - 1:
+            return get_all_method(collections, i+1, temp)
+        else:
+            return temp
 
-    if i == 3:
-        result3 = foo(i, nodes[i], result2)
-        print('result3: %s' % result3)
+test = [3, 2, 3, None, 3, None, 1]
+result = get_all_method(test, 0, [])
+print(result)
+print('*' * 30)
 
-    if i == 4:
-        result4 = foo(i, nodes[i], result3)
-        print('result4: %s' % result4)
-
-    if i == 5:
-        result5 = foo(i, nodes[i], result4)
-        print('result5: %s' % result5)
-
-sums = []
-for re in result5:
-    sum = 0
-    for r in range(len(re)):
-        if re[r] == 1:
-            sum += nodes[r].value
-    sums.append(sum)
-print(sums)
+nums = []
+for r in result:
+    num = 0
+    for j in range(len(r)):
+        if r[j] == 1:
+            num += test[j]
+    nums.append(num)
+print(nums)  # [7, 6, 4, 3, 5, 3, 2, 6, 3, 4, 3, 1, 0]
