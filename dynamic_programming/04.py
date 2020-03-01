@@ -35,6 +35,10 @@ r"""
 
 最后等于 0 或者 3
 
+arr = [3, 34, 4, 12, 5, 2]
+       3  3   7  7   7  9
+       0  0   4  4   9  9
+
 """
 arr = [3, 34, 4, 12, 5, 2]
 
@@ -149,3 +153,76 @@ print(result)
 """
 [[3, 3, 7, 7, 7, 9], [0, 0, 4, 4, 9, 9]]
 """
+
+
+r"""
+如果有一组数之和为 9，列出所有的组合方式
+
+方法二：
+
+"""
+
+arr = [3, 34, 4, 12, 5, 2]
+s = 9
+
+# 0 -> 3, []
+[3]
+[0]
+
+# 1 -> 34, [3]
+[3, 37]
+[3, 3]
+[0, 34]
+[0, 0]
+
+# 2 -> 4, [3, 37]
+[3, 37, 41]
+[3, 37, 37]
+...
+
+# 3 -> 12, [3, 37, 41]
+[3, 37, 41, 53]
+[3, 37, 41, 41]
+
+# 4 -> 5, [3, 37, 41, 53]
+[3, 37, 41, 53, 58]  # return [[3, 37, 41, 53, 58, 60], [3, 37, 41, 53, 58, 58]]
+[3, 37, 41, 53, 53]  # return [[3, 37, 41, 53, 53, 55], [3, 37, 41, 53, 53, 53]]
+
+# return [[3, 37, 41, 53, 58, 60], [3, 37, 41, 53, 58, 58], [3, 37, 41, 53, 53, 55], [3, 37, 41, 53, 53, 53]]
+
+# 5 -> 2, [3, 37, 41, 53, 58]
+[3, 37, 41, 53, 58, 60]
+[3, 37, 41, 53, 58, 58]
+
+# return [[3, 37, 41, 53, 58, 60], [3, 37, 41, 53, 58, 58]]
+
+
+
+def get_all_list_3(collentions, i, s, sum_list):
+    result = []
+    if i == 0 and (not len(sum_list)):
+        temp1 = get_all_list_3(collentions, i+1, s, [collentions[i]])
+        temp2 = get_all_list_3(collentions, i+1, s, [0])
+        temp1.extend(temp2)
+        for temp in temp1:
+            if temp[-1] == s:
+                result.append(temp)
+        return result
+    elif i >= 1 and i <= len(collentions) - 2 and len(sum_list):
+        temp1 = sum_list[:]
+        temp1.append(sum_list[-1]+collentions[i])
+        temp1 = get_all_list_3(collentions, i+1, s, temp1)
+        temp2 = sum_list[:]
+        temp2.append(sum_list[-1])
+        temp2 = get_all_list_3(collentions, i+1, s, temp2)
+        temp1.extend(temp2)
+        return temp1
+    elif i == len(collentions) - 1:
+        temp1 = sum_list[:]
+        temp1.append(sum_list[-1]+collentions[i])
+        temp2 = sum_list[:]
+        temp2.append(sum_list[-1])
+        return [temp1, temp2]
+
+result = get_all_list_3(arr, 0, 9, [])
+print(result)
