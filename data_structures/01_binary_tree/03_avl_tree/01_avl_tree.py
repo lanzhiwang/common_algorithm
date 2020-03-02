@@ -5,95 +5,69 @@ avl 平衡二叉树使用到的相关辅助对象和函数
 
 """
 
-
-class my_queue:
+class MyQueue():
     def __init__(self):
         self.data = []
         self.head = 0
         self.tail = 0
 
-    """
-    push(1)
-    push(2)
-    push(3)
-    
-    [1, 2, 3]
-    head=0   tail=3
-    """
     def push(self, data):
         self.data.append(data)
-        self.tail = self.tail + 1
+        self.tail += 1
 
-    """
-    [1, 2, 3]
-    head=0   tail=3
-    
-    [1, 2, 3]
-    head=1 tail=3
-    """
     def pop(self):
         ret = self.data[self.head]
-        self.head = self.head + 1
+        self.head += 1
         return ret
 
-    """
-    [1, 2, 3]
-    head=1 tail=3
-    
-    tail-head = 2
-    """
     def count(self):
         return self.tail - self.head
 
-    def isEmpty(self):
+    def is_empty(self):
         return self.head == self.tail
 
-    def print(self):
+    def print_queue(self):
         print(self.data)
         print("**************")
         print(self.data[self.head:self.tail])
 
 
-class my_node:
+class Node:
     def __init__(self, data):
         self.data = data
         self.left = None
         self.right = None
         self.height = 1
 
-    def getdata(self):
+    def get_data(self):
         return self.data
 
-    def getleft(self):
+    def get_left(self):
         return self.left
 
-    def getright(self):
+    def get_right(self):
         return self.right
 
-    def getheight(self):
+    def get_height(self):
         return self.height
 
-    def setdata(self, data):
+    def set_data(self, data):
         self.data = data
-        return
 
-    def setleft(self, node):
+    def set_left(self, node):
         self.left = node
-        return
 
-    def setright(self, node):
+    def set_right(self, node):
         self.right = node
-        return
 
-    def setheight(self, height):
+    def set_height(self, height):
         self.height = height
-        return
 
 
-def getheight(node):
+def get_height(node):
     if node is None:
         return 0
-    return node.getheight()
+    return node.get_height()
 
 
 def my_max(a, b):
@@ -102,13 +76,13 @@ def my_max(a, b):
     return b
 
 
-def getRightMost(root):
-    while root.getright() is not None:
-        root = root.getright()
-    return root.getdata()
+def get_right_most(node):
+    while node.get_right() is not None:
+        node = node.get_right()
+    return node.get_data()
 
 
-def getLeftMost(root):
-    while root.getleft() is not None:
-        root = root.getleft()
-    return root.getdata()
+def get_left_most(node):
+    while node.get_left() is not None:
+        node = node.get_left()
+    return node.get_data()

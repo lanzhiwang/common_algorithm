@@ -1,14 +1,68 @@
 # -*- coding: utf-8 -*-
-"""
-https://www.cnblogs.com/vamei/archive/2013/03/21/2964092.html
-https://www.cnblogs.com/suimeng/p/4560056.html
-"""
+
+class MyQueue():
+    def __init__(self):
+        self.data = []
+        self.head = 0
+        self.tail = 0
+
+    def push(self, data):
+        self.data.append(data)
+        self.tail += 1
+
+    def pop(self):
+        ret = self.data[self.head]
+        self.head += 1
+        return ret
+
+    def count(self):
+        return self.tail - self.head
+
+    def is_empty(self):
+        return self.head == self.tail
+
+    def print_queue(self):
+        print(self.data)
+        print("**************")
+        print(self.data[self.head:self.tail])
 
 
-def getheight(node):
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+        self.height = 1
+
+    def get_data(self):
+        return self.data
+
+    def get_left(self):
+        return self.left
+
+    def get_right(self):
+        return self.right
+
+    def get_height(self):
+        return self.height
+
+    def set_data(self, data):
+        self.data = data
+
+    def set_left(self, node):
+        self.left = node
+
+    def set_right(self, node):
+        self.right = node
+
+    def set_height(self, height):
+        self.height = height
+
+
+def get_height(node):
     if node is None:
         return 0
-    return node.getheight()
+    return node.get_height()
 
 
 def my_max(a, b):
@@ -17,7 +71,19 @@ def my_max(a, b):
     return b
 
 
-def leftrotation(node):
+def get_right_most(node):
+    while node.get_right() is not None:
+        node = node.get_right()
+    return node.get_data()
+
+
+def get_left_most(node):
+    while node.get_left() is not None:
+        node = node.get_left()
+    return node.get_data()
+
+
+def left_rotation(node):
     r'''
     需要左旋转的情况：左子树的高度 - 右子树的高度 = 2
     左子树的高度 | 右子树的高度
@@ -59,20 +125,18 @@ def leftrotation(node):
        /
      UB-1
 
-
     '''
-    print("left rotation node:", node.getdata())
-    ret = node.getleft()
-    node.setleft(ret.getright())
-    ret.setright(node)
-    h1 = my_max(getheight(node.getright()), getheight(node.getleft())) + 1
-    node.setheight(h1)
-    h2 = my_max(getheight(ret.getright()), getheight(ret.getleft())) + 1
-    ret.setheight(h2)
+    ret = node.get_left()
+    node.set_left(ret.get_right())
+    ret.set_right(node)
+    h1 = my_max(get_height(node.get_left()), get_height(node.get_right())) + 1
+    node.set_height(h1)
+    h2 = my_max(get_height(ret.get_left()), get_height(ret.get_right())) + 1
+    ret.set_height(h2)
     return ret
 
 
-def rightrotation(node):
+def right_rotation(node):
     r'''
     需要右旋转的情况：左子树的高度 - 右子树的高度 = -2
     左子树的高度 | 右子树的高度
@@ -113,20 +177,18 @@ def rightrotation(node):
                 \
                 UB-1
 
-
     '''
-    print("right rotation node:", node.getdata())
-    ret = node.getright()
-    node.setright(ret.getleft())
-    ret.setleft(node)
-    h1 = my_max(getheight(node.getright()), getheight(node.getleft())) + 1
-    node.setheight(h1)
-    h2 = my_max(getheight(ret.getright()), getheight(ret.getleft())) + 1
-    ret.setheight(h2)
+    ret = node.get_right()
+    node.set_right(ret.get_left())
+    ret.set_left(node)
+    h1 = my_max(get_height(node.get_left()), get_height(node.get_right())) + 1
+    node.set_height(h1)
+    h2 = my_max(get_height(ret.get_left()), get_height(ret.get_right())) + 1
+    ret.set_height(h2)
     return ret
 
 
-def rlrotation(node):
+def rl_rotation(node):
     r'''
     需要先右旋转，再左旋转的情况：左子树的高度 - 右子树的高度 = 2
     左子树的高度 | 右子树的高度
@@ -170,11 +232,11 @@ def rlrotation(node):
                 UB-1       Bl-1
 
     '''
-    node.setleft(rightrotation(node.getleft()))
-    return leftrotation(node)
+    node.set_left(right_rotation(node.get_left()))
+    return left_rotation(node)
 
 
-def lrrotation(node):
+def lr_rotation(node):
     r"""
     需要先左旋转，再右旋转的情况：左子树的高度 - 右子树的高度 = -2
     左子树的高度 | 右子树的高度
@@ -217,5 +279,5 @@ def lrrotation(node):
          UB-1                                  Cr-1
 
     """
-    node.setright(leftrotation(node.getright()))
-    return rightrotation(node)
+    node.set_right(left_rotation(node.get_right()))
+    return right_rotation(node)
