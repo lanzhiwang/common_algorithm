@@ -52,47 +52,47 @@ r"""
 二叉树 先序(前序)遍历 -> 打印、左子树、右子树
 1 2 4 5 3 6 7
 
-before_traversal(1)
-    before_traversal(2)  return [2, 4, 5]
-    before_traversal(3)  return [3, 6, 7]
+preorder_traverse(1)
+    preorder_traverse(2)  return [2, 4, 5]
+    preorder_traverse(3)  return [3, 6, 7]
     return [1, 2, 4, 5, 3, 6, 7]
 
-before_traversal(2)
-    before_traversal(4)  return [4]
-    before_traversal(5)  return [5]
+preorder_traverse(2)
+    preorder_traverse(4)  return [4]
+    preorder_traverse(5)  return [5]
     return [2, 4, 5]
 
-before_traversal(3)
-    before_traversal(6)  return [6]
-    before_traversal(7)  return [7]
+preorder_traverse(3)
+    preorder_traverse(6)  return [6]
+    preorder_traverse(7)  return [7]
     return [3, 6, 7]
 
-before_traversal(4)
+preorder_traverse(4)
     return [4]
 
-before_traversal(5)
+preorder_traverse(5)
     return [5]
 
-before_traversal(6)
+preorder_traverse(6)
     return [6]
 
-before_traversal(7)
+preorder_traverse(7)
     return [7]
 
 """
 
 # 先序(前序)遍历
-def before_traversal(node):
+def preorder_traverse(node):
     result = []
     result.append(node.value)
     if node.left is not None:
-        result.extend(before_traversal(node.left))
+        result.extend(preorder_traverse(node.left))
     if node.right is not None:
-        result.extend(before_traversal(node.right))
+        result.extend(preorder_traverse(node.right))
     return result
 
 print('先序(前序)遍历')
-print(before_traversal(root))
+print(preorder_traverse(root))
 
 
 r"""
@@ -105,50 +105,50 @@ r"""
 二叉树 中序遍历 -> 左子树、打印、右子树
 4 2 5 1 6 3 7
 
-middle_traversal(1)
-    middle_traversal(2)  return [4, 2, 5]
+inorder_traverse(1)
+    inorder_traverse(2)  return [4, 2, 5]
     ...
-    middle_traversal(3)  return [6, 3, 7]
+    inorder_traverse(3)  return [6, 3, 7]
     return [4, 2, 5, 1, 6, 3, 7]
 
-middle_traversal(2)
-    middle_traversal(4)  return [4]
+inorder_traverse(2)
+    inorder_traverse(4)  return [4]
     ...
-    middle_traversal(5)  return [5]
+    inorder_traverse(5)  return [5]
     return [4, 2, 5]
 
-middle_traversal(3)
-    middle_traversal(6)  return [6]
+inorder_traverse(3)
+    inorder_traverse(6)  return [6]
     ...
-    middle_traversal(7)  return [7]
+    inorder_traverse(7)  return [7]
     return [6, 3, 7]
 
-middle_traversal(4)
+inorder_traverse(4)
     return [4]
 
-middle_traversal(5)
+inorder_traverse(5)
     return [5]
 
-middle_traversal(6)
+inorder_traverse(6)
     return [6]
 
-middle_traversal(7)
+inorder_traverse(7)
     return [7]
 """
 
 
 # 中序遍历
-def middle_traversal(node):
+def inorder_traverse(node):
     result = []
     if node.left is not None:
-        result.extend(middle_traversal(node.left))
+        result.extend(inorder_traverse(node.left))
     result.append(node.value)
     if node.right is not None:
-        result.extend(middle_traversal(node.right))
+        result.extend(inorder_traverse(node.right))
     return result
 
 print('中序遍历')
-print(middle_traversal(root))
+print(inorder_traverse(root))
 
 r"""
          1
@@ -160,45 +160,45 @@ r"""
 二叉树 后序遍历 -> 左子树、右子树、打印
 4 5 2 6 7 3 1
 
-after_traversal(1)
-    after_traversal(2)  return [4, 5, 2]
-    after_traversal(3)  return [6, 7, 3]
+postorder_traverse(1)
+    postorder_traverse(2)  return [4, 5, 2]
+    postorder_traverse(3)  return [6, 7, 3]
     return [4, 5, 2, 6, 7, 3, 1]
 
-after_traversal(2)
-    after_traversal(4)  return [4]
-    after_traversal(5)  return [5]
+postorder_traverse(2)
+    postorder_traverse(4)  return [4]
+    postorder_traverse(5)  return [5]
     return [4, 5, 2]
 
-after_traversal(3)
-    after_traversal(6)  return [6]
-    after_traversal(7)  return [7]
+postorder_traverse(3)
+    postorder_traverse(6)  return [6]
+    postorder_traverse(7)  return [7]
     return [6, 7, 3]
 
-after_traversal(4)
+postorder_traverse(4)
     return [4]
 
-after_traversal(5)
+postorder_traverse(5)
     return [5]
 
-after_traversal(6)
+postorder_traverse(6)
     return [6]
 
-after_traversal(7)
+postorder_traverse(7)
     return [7]
 
 """
 
 # 后序遍历
-def after_traversal(node):
+def postorder_traverse(node):
     result = []
     if node.left is not None:
-        result.extend(after_traversal(node.left))
+        result.extend(postorder_traverse(node.left))
     if node.right is not None:
-        result.extend(after_traversal(node.right))
+        result.extend(postorder_traverse(node.right))
     result.append(node.value)
     return result
 
 
 print('后序遍历')
-print(after_traversal(root))
+print(postorder_traverse(root))

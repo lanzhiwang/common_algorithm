@@ -87,7 +87,7 @@ class RedBlackTree:
         Performing one rotation can be done in O(1).
 
 
-                    10
+                    10 -> self
                    /  \
                   0   20
                 /  \
@@ -96,7 +96,7 @@ class RedBlackTree:
             -20 -5
 
 
-                       0
+                       0 -> self
                     /    \
                   -10    10
                  /  \    / \
