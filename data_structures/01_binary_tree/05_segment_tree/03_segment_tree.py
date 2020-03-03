@@ -130,29 +130,26 @@ class MinArray:
         right = self._build_tree(mid + 1, end)
         return SegmentTreeNode(start, end, min([left.val, right.val]), left, right)
 
-    def _update_tree(self, root, i, val):
-        if root.start == i and root.end == i:
-            root.val = val
+    def _update_tree(self, node, i, val):
+        if node.start == i and node.end == i:
+            node.val = val
             return
-        if i <= root.mid:
-            self._update_tree(root.left, i, val)
+        if i <= node.mid:
+            self._update_tree(node.left, i, val)
         else:
-            self._update_tree(root.right, i, val)
-        root.val = min([root.left.val, root.right.val])
+            self._update_tree(node.right, i, val)
+        node.val = min(node.left.val, node.right.val)
 
-    def _min_range(self, root, i, j):
-        if root.start == i and root.end == j:
-            return root.val
-        """
-         [i, j] [i, j] [i, j]
-        [start mid] [mid+1 end]
-        """
-        if j <= root.mid:
-            return self._min_range(root.left, i, j)
-        elif i > root.mid:
-            return self._min_range(root.right, i, j)
-        else:
-            return min([self._min_range(root.left, i, root.mid), self._min_range(root.right, root.mid + 1, j)])
+    def _min_range(self, node, i, j):
+        if node.start == i and node.end == j:
+            return node.val
+        if i <= node.mid:
+            if j <= node.mid:
+                return self._min_range(node.left, i, j)
+            else:
+                return min(self._min_range(node.left, i, node.mid), self._min_range(node.right, node.mid + 1, j))
+        else:  # i > node.mid
+            return self._min_range(node.right, i, j)
 
     def traverse(self):
         result = []
