@@ -23,7 +23,7 @@ class Node(object):
         return self.value
 
     def set_value(self, value):
-        self.label = value
+        self.value = value
 
     def get_left(self):
         return self.left
