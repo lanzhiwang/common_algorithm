@@ -22,70 +22,18 @@ https://www.cnblogs.com/ariel-dreamland/p/9166216.html
 
 注意：两结点之间的路径长度是以它们之间边的数目表示。
 
-          1
-         / \
-        2   3
-       / \   \
-      4   5   6
-
-1->1 0 1-1
-1->2 1 1-2
-1->3 1 1-3
-1->4 2 1-2-4
-1->5 2 1-2-5
-1->6 2 1-3-6
-
-2->1 1 2-1
-2->2 0 2-2
-2->3 2 2-1-3
-2->4 1 2-4
-2->5 1 2-5
-2->6 3 2-1-3-6
-
-3->1 1 3-1
-3->2 2 3-1-2
-3->3 0 3-3
-3->4 3 3-1-2-4
-3->5 3 3-1-2-5
-3->6 1 3-6
-
-4->1 2 4-2-1
-4->2 1 4-2
-4->3 3 4-2-1-3
-4->4 0 4-4
-4->5 2 4-2-5
-4->6 4 4-2-1-3-6
-
-5->1 2 5-2-1
-5->2 1 5-2
-5->3 3 5-2-1-3
-5->4 2 5-2-4
-5->5 0 5-5
-5->6 4 5-2-1-3-6
-
-6->1 2 6-3-1
-6->2 3 6-3-1-2
-6->3 1 6-3
-6->4 4 6-3-1-2-4
-6->5 4 6-3-1-2-5
-6->6 0 6-6
+###############################
 
           1
          / \
         2   3
-       / \   \
-      4   5   6
-
-                           1(2, 2, 4, 3)
-                     /                      \
-             2(1, 1, 2, 2)            3(0, 1, 1, 2)
-            /              \                 \
-      4(0, 0, 0, 1)   5(0, 0, 0, 1)   6(0, 0, 0, 1)
+       / \
+      4   5
 
 diameter_of_binary_tree(1)
-    left = diameter_of_binary_tree(2) return 2
-    right = diameter_of_binary_tree(3) return 2
-    max = 4
+    diameter_of_binary_tree(2) return 2
+    diameter_of_binary_tree(3) return 1
+    max = 3
     return 3
 
 diameter_of_binary_tree(2)
@@ -95,10 +43,10 @@ diameter_of_binary_tree(2)
     return 2
 
 diameter_of_binary_tree(3)
-    diameter_of_binary_tree(6) return 1
     diameter_of_binary_tree(None) return 0
-    max = 1
-    return 2
+    diameter_of_binary_tree(None) return 0
+    max = 0
+    return 1
 
 diameter_of_binary_tree(4)
     diameter_of_binary_tree(None) return 0
@@ -112,17 +60,21 @@ diameter_of_binary_tree(5)
     max = 0
     return 1
 
-diameter_of_binary_tree(6)
-    diameter_of_binary_tree(None) return 0
-    diameter_of_binary_tree(None) return 0
-    max = 0
-    return 1
-
 diameter_of_binary_tree(None)
     return 0
 
+###############################
+空树
+return 0
 
+###############################
 
+[1]
+
+diameter_of_binary_tree(1)
+    diameter_of_binary_tree(None) return 0
+    diameter_of_binary_tree(None) return 0
+    max
 
            1
         /     \
@@ -278,12 +230,20 @@ class Node(object):
         self.left = left
         self.right = right
 
-tree = Node(1)
-tree.left = Node(2)
-tree.right = Node(3)
-tree.left.left = Node(4)
-tree.left.right = Node(5)
-tree.right.right = Node(6)
+def list_to_tree(source_list, index):
+    if not source_list:
+        return None
+    try:
+        value = source_list[index]
+        if value is None:
+            return None
+    except IndexError:
+        return None
+
+    root = Node(value)
+    root.left = list_to_tree(source_list, 2 * index + 1)
+    root.right = list_to_tree(source_list, 2 * index + 2)
+    return root
 
 result = 0
 def diameter_of_binary_tree(node):
@@ -295,6 +255,6 @@ def diameter_of_binary_tree(node):
     result = max(result, left + right)
     return max(left, right) + 1
 
-diameter_of_binary_tree(tree)
+diameter_of_binary_tree(list_to_tree([1, 2], 0))
 print result
 
