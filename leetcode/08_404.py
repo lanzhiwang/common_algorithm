@@ -15,25 +15,25 @@ r"""
    /     \
   2       8
 
-在这个二叉树中，有三个左叶子，分别是 9 和 2，所以返回 11
+在这个二叉树中，有三个左叶子，分别是 9、15和 2，所以返回 26
 
 
 sum_of_left_leaves(3, is_left=False)
     sum_of_left_leaves(9, is_left=True) return 9
-    sum_of_left_leaves(20, is_left=False) return 2
-    return 11
+    sum_of_left_leaves(20, is_left=False) return 17
+    return 26
 
 sum_of_left_leaves(9, is_left=True)
     return 9
 
 sum_of_left_leaves(20, is_left=False)
-    sum_of_left_leaves(15, is_left=True) return 2
+    sum_of_left_leaves(15, is_left=True) return 17
     sum_of_left_leaves(7, is_left=False) return 0
-    return 2
+    return 17
 
 sum_of_left_leaves(15, is_left=True)
     sum_of_left_leaves(2, is_left=True) return 2
-    return 2
+    return 17
 
 sum_of_left_leaves(7, is_left=False)
     sum_of_left_leaves(8, is_left=False) return 0

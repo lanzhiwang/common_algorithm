@@ -95,8 +95,8 @@ diameter_of_binary_tree(1)
 diameter_of_binary_tree(1)
     diameter_of_binary_tree(2) return 1
     diameter_of_binary_tree(3) return 6
-    max = 7
-    return 7
+    max = 7  max = diameter_of_binary_tree(2) + diameter_of_binary_tree(3))
+    return 7  return max(diameter_of_binary_tree(2) + diameter_of_binary_tree(3)) + 1
 
 
 diameter_of_binary_tree(2)
